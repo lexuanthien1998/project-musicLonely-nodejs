@@ -1,0 +1,285 @@
+<style>
+	.video {
+		border: 10px solid #fff;
+	}
+	h6 span {
+		color: #f3c623;
+	}
+	.content-post {
+        position: absolute;
+        top: 70%;
+        left: 38%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+    .content-post h2 {
+        cursor: pointer;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+        font-size: 20px;
+        line-height: 1;
+        font-family: "Abril Fatface", cursive;
+		max-width: 120px;
+    }
+    .content-post h2 a {
+        color: #fff;
+    }
+    .content-post .subheading {
+        display: block;
+        text-transform: uppercase;
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+    }
+	.img-post {
+		border: 3px solid #fff;
+	}
+	.div-icon a, .div-icon a i {
+		color:#fff;
+		font-size: 20px;
+	}
+	.div-icon {
+		padding: 10px;
+		border-bottom: 2px solid #f3c623;
+	}
+	.comment-form-wrap span i {
+		color:#ff7e67;
+		font-size: 14px;
+	}
+	.div-comment h6, .new-comment h6 {
+		color: rgba(255, 255, 255, 0.4);
+		font-size: 12px;
+		font-weight: 600;
+		font-family: "Poppins", Arial, sans-serif;
+		letter-spacing: 1px;
+	}
+	.div-comment p, .new-comment p {
+		padding-bottom: 10px;
+		padding-left: 15px;
+	}
+	.font-weight-bold {
+		color: #f3c623;
+		font-size: 20px;
+		font-weight: 600;
+		font-family: "Poppins", Arial, sans-serif;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+	}
+</style>
+<div id="colorlib-main">
+	<section class="ftco-section ftco-no-pt ftco-no-pb">
+		<div class="container px-md-0">
+			<div class="row d-flex no-gutters">
+				<div class="col-12 col-lg-9 pb-5 single">
+					<div class="row pl-5 mt-5 d-flex justify-content-center">
+						<iframe class="video" width="840" height="480" src="https://www.youtube.com/embed/{{post.url}}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						<div class="pr-3 mt-4">
+							<h1 class="mb-3">{{post.title}}</h1>
+				
+							<div class="row d-flex justify-content-around div-icon my-3">
+								<a role="button">
+									<i class="fas fa-heart likes" data-id="{{post._id}}" data-number="{{post.likes}}"
+									{{#each likes}}
+										{{#compare this.post_id "==" ../post._id}}
+											style="color: #ff7e67;" data-likes="1"
+										{{/compare}}
+									{{/each}}
+									>
+									<span class="ml-1">
+									{{#compare post.likes ">" 0}}
+									{{post.likes}}
+									{{/compare}}
+									</span>
+									</i>
+								</a>
+
+								<a type="button" id="comment" ><i class="fas fa-pen"></i></a>
+								<a type="button" id="content"><i class="fas fa-list"></i></a>
+								<a href="https://www.facebook.com/sharer?u=https://www.youtube.com/watch?v={{post.url}}" target="_blank">
+									<i class="fas fa-share-square share"></i>
+								</a>
+							</div>
+
+							<div class="about-author p-3 d-flex">
+								<h6 class="mt-2">Video by <span>{{post.user.name}}</span> - posted on <span>{{formatDate post.update_at}}</span> - category <span>{{post.category}}</span> - with <span>{{post.views}}</span> Views</h6>
+							</div>
+
+							<div class="row comment-form-wrap p-3 mt-4" style="display: none;">
+								<div class="col-12">
+									<div class="form-group">
+										<label for="cmt">Comment
+											{{#if user }}
+											{{else}}
+												<span><i>You are not logged in. Please login to comment !</i></span>
+											{{/if  }}
+										</label>
+										<input type="text" class="form-control" id="cmt">
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<input type="button" id="btnComment" value="Enter" class="btn px-2 btn-primary rounded">
+									</div>
+								</div>
+							</div>
+
+							<div id="content-post" style="display: none;">
+								<h5 class="pt-4 pb-1">{{post.description}}</h5>
+								<p>{{{post.content}}}</p>
+							</div>
+
+							<div class="pt-5 mt-5">
+								<h4 class="mb-3 font-weight-bold">Comments</h4>
+								<ul class="comment-list">
+									<div class="new-comment">
+										
+									</div>
+
+									{{#each comment}}
+										{{#compare this.post_id "==" ../post._id}}
+										<div class="div-comment">
+											<h6>{{this.user.name}}</h6>
+											<p>{{this.content}}</p>
+										</div>
+										{{/compare}}
+									{{/each}}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-lg-3 p-5 single">
+					<div class="row d-flex no-gutters">
+						{{#each listPost}}
+						<a href="/details/{{ this.slug }}">
+						<div class="col-md-12 portfolio-wrap-2 mb-3" data-id="{{this._id}}">
+							<div class="row no-gutters align-items-center">
+								<div class="div-post">
+									<img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid img-post" data-id="{{this._id}}" alt="">
+									<div class="content-post" id="{{this._id}}">
+										<span class="subheading">{{this.category}}</span>
+										<h2 class="mb-4"><a href="/details/{{ this.slug }}">{{this.title}}</a></h2>
+									</div>
+								</div>
+							</div>
+						</div>
+						</a>
+						{{/each}}
+					</div>
+				</div>
+				<input id="user-id" type="text" value="{{user._id}}" hidden>
+				<input id="user-name" type="text" value="{{user.name}}" hidden>
+				<input id="post-id" type="text" value="{{post._id}}" hidden>
+				<div id="list-comment" style="display: none;"></div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(".portfolio-wrap-2").mouseenter(function(e){
+            var id = $(this)[0].dataset.id;
+            $('#' + id).fadeIn();
+            var img = $(".img-post[data-id='" + id + "']");
+            $(img).css('opacity', '0.5');
+        });
+
+        $(".portfolio-wrap-2").mouseleave(function(){
+            var id = $(this)[0].dataset.id;
+            $('#' + id).fadeOut();
+            var img = $(".img-post[data-id='" + id + "']");
+            $(img).removeAttr("style");
+        });
+    });
+
+	$(document).ready(function(){
+		$('.likes').click(function() {
+			if($('#user-id').val() == "") {
+				location.href = "/user/login"
+			} else {
+				if($(this)[0].dataset.likes == 1) {
+					$.ajax({
+						url: '/post/' + $(this)[0].dataset.id + '/unlikes',
+						type: "POST",
+						processData: false,
+						contentType: false,
+						success: function (data) {
+							if(data.failed) {}
+							if(data.success) {
+								var id = $(".likes[data-id='" + data.post_id + "']");
+								var likes = Number($(id).attr('data-number')) - 1
+								$(id).html('');
+								$(id).html("<span class='ml-2'>" +likes+ "</span>");
+								$(id).removeAttr("data-likes");
+								$(id).removeAttr("style");
+								$(id).attr("data-number", likes);
+							}
+						}
+					});
+				} else {
+					$.ajax({
+						url: '/post/'+ $(this)[0].dataset.id + '/likes',
+						type: "POST",
+						processData: false,
+						contentType: false,
+						success: function (data) {
+							if(data.failed) {}
+							if(data.success) {
+								var id = $(".likes[data-id='" + data.post_id + "']");
+								var likes = Number($(id).attr('data-number')) + 1
+								$(id).css('color', '#ff7e67');
+								$(id).html('');
+								$(id).html("<span class='ml-2'>" +likes+ "</span>");
+								$(id).attr("data-likes", 1);
+								$(id).attr("data-number", likes);
+							}
+						}
+					});
+				}
+			}
+		})
+	});
+
+	$(document).ready(function(){
+		$("#comment").click(function(){
+			$(".comment-form-wrap").slideToggle();
+		});
+	});
+	$('#btnComment').click(function() {
+		if($('#user-id').val() == "") {
+				location.href = "/user/login"
+		} else {
+			$.ajax({
+				url: '/post/comment/'+ $('#post-id').val() + '/' + $('#cmt').val(),
+				type: "POST",
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					if(data.failed) {}
+					if(data.success) {
+						$('#cmt').val("");
+						$(".comment-form-wrap").hide();
+						var itemHtml = `
+						<h6>`+ $('#user-name').val() +`</h6>
+						<p>`+ data.comment +`</p>
+						`;
+
+						$('.new-comment').append(itemHtml);
+					}
+				}
+			});
+		}
+	})
+	$(document).ready(function(){
+		$("#content").click(function(){
+			$("#content-post").toggle();
+		});
+	});
+</script>

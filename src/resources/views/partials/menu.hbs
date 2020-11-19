@@ -1,0 +1,66 @@
+
+    {{!-- <div class="social-links-warp">
+      <div class="social-links">
+        <a href="https://www.facebook.com/testlifeOnlyI"><i class="fa fa-facebook"></i></a>
+        <a href="https://www.youtube.com/channel/UCUcLH0fcf3F5dMFYnx9FI3A"><i class="fab fa-youtube"></i></a>
+        <a href="https://twitter.com/LXUNTHIN3"><i class="fa fa-twitter"></i></a>
+      </div>
+    </div>
+  </div> --}}
+
+
+<a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
+<aside id="colorlib-aside" role="complementary" class="js-fullheight">
+  <h1 id="colorlib-logo" class="mb-4 mb-md-5"><a href="/" style="background-image: url(/images/bg_1.jpg);">Lonely.</a></h1>
+  <nav id="colorlib-main-menu" role="navigation">
+    <ul>
+      <li id="home"><a href="/">Home</a></li>
+      <li id="home-post"><a href="/list/post">ALL Album</a></li>
+      {{!-- <li><a href="/about-me">About Me</a></li>
+      <li><a href="contact.html">Contact</a></li> --}}
+      {{#if user}}
+        <li id="post-admin"><a href="/post">Profile of {{user.name}}</a></li>
+        <li><a href="/user/logout">Logout</a></li>
+      {{else}}
+        <li><a href="/user/login">Login</a></li>
+        <li><a href="/user/register">Register</a></li>
+      {{/if}}
+    </ul>
+  </nav>
+
+  <div class="colorlib-footer d-flex">
+    <p style="letter-spacing: 0.05em;" class="pfooter">
+      lexuanthien
+    </p>
+    <a href="https://www.facebook.com/testlifeOnlyI"><i class="fa fa-facebook"></i></a>
+    <a href="https://www.youtube.com/channel/UCUcLH0fcf3F5dMFYnx9FI3A"><i class="fab fa-youtube"></i></a>
+    <a href="https://twitter.com/LXUNTHIN3"><i class="fa fa-twitter"></i></a>
+  </div>
+</aside>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('#colorlib-main-menu li').children('a').each(function () {
+        var url = this.href;
+        console.log(url, window.location.pathname,url.indexOf('/details/'))
+        if(url.indexOf(window.location.pathname) == 21) {
+          $(this).parent().addClass('colorlib-active');
+          return true;
+        } else if(url.indexOf(window.location.pathname) == -1) {
+          $(this).parent().removeClass('colorlib-active');
+        } else if(url === window.location.href) {
+          $('#home').addClass('colorlib-active');
+        } 
+
+        if(url.indexOf('/details/') == 21) {
+          $('#home-post').addClass('colorlib-active');
+          return true;
+        }
+        if(window.location.pathname === '/post/create' || window.location.pathname === '/post/edit') {
+          $('#post-admin').addClass('colorlib-active');
+          return true;
+        }
+    });
+  });
+</script>

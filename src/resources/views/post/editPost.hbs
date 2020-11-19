@@ -1,0 +1,45 @@
+
+<div id="colorlib-main">
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
+        <div class="container px-md-0">
+            <div class="row d-flex no-gutters">
+                <div class="col-lg-8 col-md-7 order-md-last d-flex align-items-stretch">
+                    <div class="contact-wrap w-100 p-md-5 p-4">
+
+                        <h3 class="mb-4 heading">SignIn</h3>
+                        <form method="POST" action="/post/update-post/{{post._id}}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="title">Tiêu đề:</label>
+                                <input type="text" id="title" class="form-control" placeholder="Tiêu đề bài viết !" value="{{post.title}}" name="title">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <textarea type="text" id="description" class="form-control" placeholder="Mô tả bài viết !" rows="5" name="description">{{post.description}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="content">Content:</label>
+                                <textarea type="text" id="content" class="form-control" placeholder="Nội dung bài viết !" rows="8" name="content">{{post.content}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Image URL:</label>
+                                {{!-- <input type="text" id="image" class="form-control" name="image" placeholder="Hình ảnh bài viết !"> --}}
+                                <input type="file" class="form-control-file" name="image" placeholder="Hình ảnh bài viết !">
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category:</label>
+                                <input type="text" id="category" class="form-control" placeholder="Thể loại bài viết !" value="{{post.category}}" name="category">
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Author:</label>
+                                <input type="text" id="author" class="form-control" placeholder="Tác giả !" value="{{post.author}}" name="author">
+                            </div>
+                            <button type="submit" class="btn btn-success">UPDATE POST</button>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

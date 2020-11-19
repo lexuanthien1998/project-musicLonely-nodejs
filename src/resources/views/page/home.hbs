@@ -1,0 +1,263 @@
+<style>
+	.icon a, .icon a i {
+		margin-right: 10px;
+		font-size: 18px;
+		color: #fff;
+	}
+	.portfolio-wrap img {
+		border: 5px solid #fff;
+	}
+	.portfolio-wrap .text h2 {
+		cursor: pointer;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 4;
+		-webkit-box-orient: vertical;
+	}
+	.portfolio-wrap .text h2:hover {
+		color:#ff7e67 !important;
+	}
+	@media (min-width: 992px) {
+		.vbox-close {
+			margin-top: 20px;
+			margin-right: 40px;
+			font-size: 40px;
+		}
+	}
+	@media (max-width: 992px) {
+		.vbox-close {
+			margin-top: 10px;
+			font-size: 20px;
+		}
+	}
+	a i:hover {
+		color:#ff7e67;
+	}
+</style>
+
+<div id="colorlib-main">
+	<section class="ftco-section ftco-no-pt ftco-no-pb">
+		<div class="container px-md-0">
+			{{#each post}}
+				{{#compare (remainder @key 2) "==" 0}}
+				<div class="row d-flex no-gutters my-5">
+					<div class="col-md-12 portfolio-wrap">
+						<div class="row no-gutters align-items-center">
+							<div class="col-md-6">
+								<img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid w-100">
+							</div>
+							<div class="col-md-6">
+								<div class="text pl-0 px-lg-5 pl-md-4 ftco-animate">
+									<div class="px-4 px-lg-4">
+										<div class="desc">
+											<div class="top">
+												<span class="subheading">{{this.category}}</span>
+												<h2 class="mb-4"><a href="/details/{{ this.slug }}">{{this.title}}</a></h2>
+											</div>
+											{{#if  this.description }}
+												<div class="absolute">
+													<p>{{this.description}}</p>
+												</div>
+											{{/if  }}
+											{{!-- <p><a href="single.html" class="custom-btn">View Portfolio</a></p> --}}
+
+											<div class="icon">
+												<a class="venobox" data-vbtype="video" href="https://www.youtube.com/watch?v={{this.url}}">
+													<i id="{{this._id}}" class="fas fa-play play"></i>
+												</a>
+
+												<a role="button">
+													<i class="fas fa-heart likes" data-id="{{this._id}}" data-number="{{this.likes}}"
+													{{#each ../likes}}
+														{{#compare this.post_id "==" ../this._id}}
+															style="color: #ff7e67;" data-likes="1"
+														{{/compare}}
+													{{/each}}
+													>
+														<span class="ml-1">
+														{{#compare this.likes ">" 0}}
+														{{this.likes}}
+														{{/compare}}
+														</span>
+													</i>
+												</a>
+
+												<a role="button">
+													<i class="fas fa-headphones-alt views" data-id="{{this._id}}">
+														<span class="ml-1">
+														{{#compare this.views ">" 0}}
+														{{this.views}}
+														{{/compare}}
+														</span>
+													</i>
+												</a>
+
+												<a href="/details/{{this.slug}}">
+													<i class="fas fa-paper-plane" data-id="{{this._id}}"></i>
+												</a>
+												<a href="https://www.facebook.com/sharer?u=https://www.youtube.com/watch?v={{this.url}}" target="_blank">
+													<i class="fas fa-share" data-id="{{this._id}}"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{{else}}
+					<div class="row d-flex no-gutters my-5">
+						<div class="col-md-12 portfolio-wrap">
+							<div class="row no-gutters align-items-center">
+								<div class="col-md-6">
+									<div class="text px-md-5 ftco-animate">
+										<div class="px-4 px-lg-4">
+											<div class="desc text-md-right">
+												<div class="top">
+													<span class="subheading">{{this.category}}</span>
+													<h2 class="mb-4"><a href="/details/{{ this.slug }}">{{this.title}}</a></h2>
+												</div>
+												{{#if  this.description }}
+												<div class="absolute">
+													<p>{{this.description}}</p>
+												</div>
+												{{/if  }}
+												{{!-- <p><a href="single.html" class="custom-btn">View Portfolio</a></p> --}}
+
+												<div class="icon">
+													<a class="venobox" data-vbtype="video" href="https://www.youtube.com/watch?v={{this.url}}">
+														<i id="{{this._id}}" class="fas fa-play play"></i>
+													</a>
+
+													<a role="button">
+														<i class="fas fa-heart likes" data-id="{{this._id}}" data-number="{{this.likes}}"
+														{{#each ../likes}}
+															{{#compare this.post_id "==" ../this._id}}
+																style="color: #ff7e67;" data-likes="1"
+															{{/compare}}
+														{{/each}}
+														>
+															<span class="ml-1">
+															{{#compare this.likes ">" 0}}
+															{{this.likes}}
+															{{/compare}}
+															</span>
+														</i>
+													</a>
+
+													<a role="button">
+														<i class="fas fa-headphones-alt views" data-id="{{this._id}}">
+															<span class="ml-1">
+															{{#compare this.views ">" 0}}
+															{{this.views}}
+															{{/compare}}
+															</span>
+														</i>
+													</a>
+
+													<a href="/details/{{this.slug}}">
+														<i class="fas fa-paper-plane" data-id="{{this._id}}"></i>
+													</a>
+													<a href="https://www.facebook.com/sharer?u=https://www.youtube.com/watch?v={{this.url}}" target="_blank">
+														<i class="fas fa-share" data-id="{{this._id}}"><span class="ml-1"></span></i>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid w-100">
+								</div>
+							</div>
+						</div>
+					</div>
+				{{/compare}}
+			{{/each}}
+			<input id="user-id" type="text" value="{{user._id}}" hidden>
+			<div class="row d-flex mb-3">
+				<div class="col-md-12">
+					<a href="/list/post" class="btn-custom-load d-block w-100 text-center py-4">All Album</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$('.venobox').venobox({
+			//numeratio: true,
+			//border: '20px',
+			autoplay :true,
+			spinner: 'rotating-plane',
+			overlayClose: false
+		});
+
+		$('.play').click(function() {
+			$.ajax({
+				url: '/post/' + $(this).attr('id') + '/add-views',
+				type: "POST",
+				processData: false,
+				contentType: false,
+				success: function (data) {
+				}
+			});
+		})
+
+		$('.likes').click(function() {
+			if($('#user-id').val() == "") {
+				location.href = "/user/login"
+			} else {
+				let formData = new FormData();
+				formData.append("user_id", $('#user-id').val());
+				formData.append("post_id", $(this)[0].dataset.id);
+
+				if($(this)[0].dataset.likes == 1) {
+					$.ajax({
+						url: '/post/'+ $(this)[0].dataset.id + '/unlikes',
+						data: formData,
+						type: "POST",
+						processData: false,
+						contentType: false,
+						success: function (data) {
+							if(data.failed) {}
+							if(data.success) {
+								var id = $(".likes[data-id='" + data.post_id + "']");
+								var likes = Number($(id).attr('data-number')) - 1
+								$(id).html('');
+								$(id).html("<span class='ml-1'>" +likes+ "</span>");
+								$(id).removeAttr("data-likes");
+								$(id).removeAttr("style");
+								$(id).attr("data-number", likes);
+							}
+						}
+					});
+				} else {
+					$.ajax({
+						url: '/post/'+ $(this)[0].dataset.id + '/likes',
+						data: formData,
+						type: "POST",
+						processData: false,
+						contentType: false,
+						success: function (data) {
+							if(data.failed) {}
+							if(data.success) {
+								var id = $(".likes[data-id='" + data.post_id + "']");
+								var likes = Number($(id).attr('data-number')) + 1
+								$(id).css('color', '#ff7e67');
+								$(id).html('');
+								$(id).html("<span class='ml-1'>" +likes+ "</span>");
+								$(id).attr("data-likes", 1);
+								$(id).attr("data-number", likes);
+							}
+						}
+					});
+				}
+			}
+		})
+	});
+</script>

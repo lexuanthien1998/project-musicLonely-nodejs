@@ -1,0 +1,98 @@
+<style>
+    .div-post {
+        padding: 10px;
+        position: relative;
+    }
+    .img-post {
+        color: white;
+        {{!-- border: 4px solid #fff; --}}
+    }
+    .content-post {
+        position: absolute;
+        top: 60%;
+        left: 38%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+    .content-post h2 {
+        cursor: pointer;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+        font-size: 35px;
+        line-height: 1;
+        font-family: "Abril Fatface", cursive;
+        max-width: 250px;
+    }
+    .content-post h2 a {
+        color: #fff;
+    }
+    .content-post .subheading {
+        display: block;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 3px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+    }
+    .content-post .custom-btn {
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 3px;
+        color: #f3c623;
+        font-weight: 700;
+        border: 1px solid #f3c623;
+        padding: 2px 5px;
+    }
+</style>
+<div id="colorlib-main">
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
+        <div class="container px-md-0 my-4">
+            <div class="row d-flex no-gutters">
+
+                {{#each post}}
+                <div class="col-md-4 portfolio-wrap-2" data-id="{{this._id}}">
+                    <div class="row no-gutters align-items-center">
+                        <div class="div-post">
+                            <img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid rounded img-post" data-id="{{this._id}}" alt="">
+                            <div class="content-post" id="{{this._id}}">
+                                <span class="subheading">{{this.category}}</span>
+                                <h2 class="mb-4"><a href="/details/{{ this.slug }}">{{this.title}}</a></h2>
+                                <p><a href="/details/{{ this.slug }}" class="custom-btn">View Portfolio</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                <input id="user-id" type="text" value="{{user._id}}" hidden>
+
+            </div>
+            <div class="row d-flex justify-content-center py-3">
+                <div class="col-md-8">
+                    <a href="#" class="btn-custom-load d-block w-100 text-center py-3">Load more <span class="fa fa-refresh"></span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(".portfolio-wrap-2").mouseenter(function(e){
+            var id = $(this)[0].dataset.id;
+            $('#' + id).fadeIn();
+            var img = $(".img-post[data-id='" + id + "']");
+            $(img).css('opacity', '0.5');
+        });
+
+        $(".portfolio-wrap-2").mouseleave(function(){
+            var id = $(this)[0].dataset.id;
+            $('#' + id).fadeOut();
+            var img = $(".img-post[data-id='" + id + "']");
+            $(img).removeAttr("style");
+        });
+    });
+</script>

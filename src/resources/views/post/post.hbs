@@ -1,0 +1,96 @@
+<style>
+    .btn {
+        font-size: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #fff;
+    }
+    .modal-title {
+        color: #555555;
+        text-transform: lowercase;
+    }
+</style>
+
+<div id="colorlib-main">
+    <section class="ftco-about img ftco-section ftco-no-pt ftco-no-pb" id="about-section">
+        <div class="container-fluid px-5 py-5">
+
+                <div class="row d-flex justify-content-between">
+                    <div class="text pt-5 pt-md-0 px-md-4 pr-md-5 ftco-animate">
+                        <h2 class="mb-4">Album of <span class="mx-1">{{ user.name }}</span>!</h2>                            
+                    </div>
+                    <div class="mr-5">
+                        <a href="/post/create">
+                            <button type="button" class="btn btn-info btn-sm rounded-0">Create post</button>
+                        </a>
+                    </div>
+                </div>
+
+                {{#if post }}
+                <div class="table-wrapper">
+                    <table class="text-center">
+                        <thead>
+                            <tr class="d-flex">
+                                <th class="col-2">IMG</th>
+                                <th class="col-5">TITLE</th>
+                                <th class="col-2">URL</th>
+                                <th class="col-3">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each post}}
+                            <tr class="d-flex">
+                                <td class="col-2">
+                                    <img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid" alt="">
+                                </td>
+                                <td class="col-5">{{this.title}}</td>
+                                <td class="col-2">{{this.url}}</td>
+                                <td class="col-3 d-flex justify-content-center">
+                                    <a href="/post/{{this._id}}/edit">
+                                        <button type="button" class="btn btn-primary btn-sm rounded-0 mr-4">edit</button>
+                                    </a>
+                                    <div>
+                                        <button type="button" data-id="{{this._id}}" data-toggle="modal" data-target="#DeletePost" class="btn btn-secondary btn-sm rounded-0">delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{/each}} 
+                        </tbody>
+                    </table>
+                </div>
+                {{/if }}
+
+                <div class="modal fade" id="DeletePost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="d-flex justify-content-between mx-4 my-3">
+                                <h3 class="modal-title">XÓA HAY KHÔNG XÓA !</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="d-flex ml-auto mx-4 my-4">
+                                <button type="button" id="btn-back" class="btn btn-secondary rounded-0 mr-3" data-dismiss="modal">Không</button>
+                                <form id="addAction" action="" method="POST">
+                                    <button type="submit" class="btn btn-danger rounded-0">Có</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </section>
+</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#DeletePost').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                $("#addAction").attr("action", "/post/"+id+"/delete");
+            })
+            $('#btn-back').click(function() {
+                $("#addAction").attr("action", "");
+            })
+        });
+    </script>
+</div>

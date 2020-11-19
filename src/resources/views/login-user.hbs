@@ -1,0 +1,47 @@
+<style>
+    h3 {
+        font-family: "Abril Fatface", cursive;
+        letter-spacing: 0.2em;
+    }
+    #submit {
+        letter-spacing: 0.2em;
+    }
+</style>
+<div id="colorlib-main">
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
+        <div class="container px-md-0">
+            <div class="row d-flex no-gutters">
+                <div class="col-lg-8 col-md-7 order-md-last d-flex align-items-stretch">
+                    <div class="contact-wrap w-100 p-md-5 p-4">
+                        <h3 class="mb-4 heading">SignIn</h3>
+                        <form method="POST" action="/user/login" id="contactForm" name="contactForm" class="contactForm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="label" for="name">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email !">
+                                    </div>
+                                </div>
+                                <div class="col-md-12"> 
+                                    <div class="form-group">
+                                        <label class="label" for="email">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password !">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" id="submit" class="btn btn-info rounded-0 heading">Login</button>
+                                </div>
+
+                                <div class="col-md-12 mt-2">
+                                    {{#if message}}
+                                        <i>{{message}}</i>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
