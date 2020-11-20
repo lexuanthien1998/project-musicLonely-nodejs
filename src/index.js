@@ -6,6 +6,8 @@ const morgan = require('morgan');
 const handlebars = require('express-handlebars');
 const helpers = require('handlebars-helpers')();
 
+require('dotenv').config({ path: '.env'})
+
 app.use(express.static(path.join(__dirname, 'public'))); //http://localhost:3000/img/anh.jpg -- các link tĩnh
 
 app.use(express.urlencoded()); //sử dụng cho route POST
@@ -61,8 +63,9 @@ Handlebars.registerHelper('formatDate', function(dateString) {
   return moment(new Date(dateString)).format('LL');
 });
 
-const port = 3000;
-app.listen(port, () => {
+const host = process.env.HOST || '0.0.0.0';
+const port = process.env.PORT || 3000;
+app.listen(port, host, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
  
