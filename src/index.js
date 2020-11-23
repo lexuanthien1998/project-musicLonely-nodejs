@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 
 const path = require('path');
-const morgan = require('morgan');
 const handlebars = require('express-handlebars');
 const helpers = require('handlebars-helpers')();
 
@@ -13,6 +12,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //http://localhost:3000
 app.use(express.urlencoded()); //sử dụng cho route POST
 app.use(express.json()); //sử dụng cho route POST với dữ liệu Json (trong js)
 
+const morgan = require('morgan');
 app.use(morgan('combined'));
 
 //Template engine
