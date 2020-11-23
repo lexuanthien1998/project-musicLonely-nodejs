@@ -175,6 +175,21 @@
 						</div>
 					</div>
 				{{/compare}}
+
+				{{!-- LẤY PHẦN TỬ TIẾP THEO TRONG VÒNG LẶP FOREACH ĐỂ SỬ DỤNG --}}
+				{{!-- {{#withFirst (after ../post (add @index 1))}}
+					<div class="next-slide-show set-bg" data-setbg="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg">
+						<a href="#{{this.slug}}" class="ns-btn">Next</a>
+					</div>
+					{{#compare (add @index 1) "==" (length ../../post)}}
+						{{#withFirst ../../../post}}
+							<div class="next-slide-show set-bg" data-setbg="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg">
+								<a href="#{{this.slug}}" class="ns-btn">Next</a>
+							</div>
+						{{/withFirst}}
+					{{/compare}}
+				{{/withFirst}} --}}
+
 			{{/each}}
 			<input id="user-id" type="text" value="{{user._id}}" hidden>
 			<div class="row d-flex mb-3">
