@@ -26,6 +26,7 @@
     "handlebars": "^4.7.6",
     "handlebars-helpers": "^0.10.0",
     "jquery": "^3.5.1",
+    "memorystore": "^1.6.4",
     "moment": "^2.29.1",
     "mongoose": "^5.10.15",
     "mongoose-slug-updater": "^3.2.3",

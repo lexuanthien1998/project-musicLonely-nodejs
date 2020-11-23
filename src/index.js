@@ -23,13 +23,14 @@ app.engine('hbs', handlebars({
 
 //Express session
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+// const MongoStore = require('connect-mongo')(session);
+const MemoryStore = require('memorystore')(session)
 app.use(session({
   secret: "secret",
   resave: true,
   saveUninitialized: true,
   cookie: {secure: false, maxAge: 1*60*60*1000},
-  store: new MongoStore(options),
+  store: new MemoryStore({checkPeriod: 86400000}),
 }))
 
 app.set('view engine', 'hbs'); //đặt ứng dụng là dùng handlebars
