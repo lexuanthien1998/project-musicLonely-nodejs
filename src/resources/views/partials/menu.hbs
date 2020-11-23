@@ -11,7 +11,7 @@
 
 <a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
 <aside id="colorlib-aside" role="complementary" class="js-fullheight">
-  <h1 id="colorlib-logo" class="mb-4 mb-md-5"><a href="/" style="background-image: url(/images/bg_1.jpg);">Lonely.</a></h1>
+  <h1 id="colorlib-logo" class="mb-4 mb-md-5"><a href="/" style="background-image: url(/images/bg_1.jpg);">Hi. aLL</a></h1>
   <nav id="colorlib-main-menu" role="navigation">
     <ul>
       <li id="home"><a href="/">Home</a></li>
@@ -41,25 +41,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   $(document).ready(function(){
+    var arr = [];
+    arr = [];
     $('#colorlib-main-menu li').children('a').each(function () {
         var url = this.href;
-        console.log(url, window.location.pathname,url.indexOf('/details/'))
-        if(url.indexOf(window.location.pathname) == 21) {
+        if(window.location.href.indexOf(url) > -1) {
+          arr.push(window.location.href.indexOf(url));
+        }
+
+        if (window.location.href.indexOf(url) > -1) {
           $(this).parent().addClass('colorlib-active');
           return true;
-        } else if(url.indexOf(window.location.pathname) == -1) {
-          $(this).parent().removeClass('colorlib-active');
-        } else if(url === window.location.href) {
-          $('#home').addClass('colorlib-active');
-        } 
-
-        if(url.indexOf('/details/') == 21) {
-          $('#home-post').addClass('colorlib-active');
-          return true;
         }
-        if(window.location.pathname === '/post/create' || window.location.pathname === '/post/edit') {
-          $('#post-admin').addClass('colorlib-active');
-          return true;
+        if (window.location.href.indexOf('details/') > -1) {
+          $('#home-post').addClass('colorlib-active');
+          $('#home').removeClass('colorlib-active');
+        }
+        if(arr.length > 1) {
+          $('#home').removeClass('colorlib-active');
         }
     });
   });

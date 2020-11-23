@@ -1,6 +1,6 @@
 <style>
     .btn {
-        font-size: 20px;
+        font-size: 15px;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -18,11 +18,11 @@
 
                 <div class="row d-flex justify-content-between">
                     <div class="text pt-5 pt-md-0 px-md-4 pr-md-5 ftco-animate">
-                        <h2 class="mb-4">Album of <span class="mx-1">{{ user.name }}</span>!</h2>                            
+                        <h2 class="mb-4">List of <span class="mx-1">{{ user.name }}</span>!</h2>                            
                     </div>
                     <div class="mr-5">
                         <a href="/post/create">
-                            <button type="button" class="btn btn-info btn-sm rounded-0">Create post</button>
+                            <button type="button" class="btn btn-info btn-sm rounded">Create post</button>
                         </a>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                         </thead>
                         <tbody>
                             {{#each post}}
-                            <tr class="d-flex">
+                            <tr class="d-flex py-2">
                                 <td class="col-2">
                                     <img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid" alt="">
                                 </td>
@@ -48,10 +48,10 @@
                                 <td class="col-2">{{this.url}}</td>
                                 <td class="col-3 d-flex justify-content-center">
                                     <a href="/post/{{this._id}}/edit">
-                                        <button type="button" class="btn btn-primary btn-sm rounded-0 mr-4">edit</button>
+                                        <button type="button" class="btn btn-primary btn-sm rounded mr-4">edit</button>
                                     </a>
                                     <div>
-                                        <button type="button" data-id="{{this._id}}" data-toggle="modal" data-target="#DeletePost" class="btn btn-secondary btn-sm rounded-0">delete</button>
+                                        <button type="button" data-id="{{this._id}}" data-toggle="modal" data-target="#DeletePost" class="btn btn-secondary btn-sm rounded">delete</button>
                                     </div>
                                 </td>
                             </tr>

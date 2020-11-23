@@ -1,41 +1,49 @@
-
+<style>
+    .ck-editor__editable_inline {
+        min-height: 150px;
+    }
+    label, .btn {
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+</style>
 <div id="colorlib-main">
     <section class="ftco-section ftco-no-pt ftco-no-pb">
-        <div class="container px-md-0">
+        <div class="container ml-0 px-md-0">
             <div class="row d-flex no-gutters">
-                <div class="col-lg-8 col-md-7 order-md-last d-flex align-items-stretch">
-                    <div class="contact-wrap w-100 p-md-5 p-4">
+                <div class="col-lg-12 col-md-12 order-md-last d-flex align-items-stretch">
+                    <div class="contact-wrap w-100 p-md-5">
 
-                        <h3 class="mb-4 heading">SignIn</h3>
-                        <form method="POST" action="/post/update-post/{{post._id}}" enctype="multipart/form-data">
+                        <h3 class="mb-4 heading">Edit Post</h3>
+                        <form method="POST" action="/post/store" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label for="title">Tiêu đề:</label>
+                                <label for="title">TITLE</label>
                                 <input type="text" id="title" class="form-control" placeholder="Tiêu đề bài viết !" value="{{post.title}}" name="title">
                             </div>
+                            
                             <div class="form-group">
-                                <label for="description">Description:</label>
-                                <textarea type="text" id="description" class="form-control" placeholder="Mô tả bài viết !" rows="5" name="description">{{post.description}}</textarea>
+                                <label class="label" for="description">DESCRIPTION</label>
+                                <textarea name="description" class="form-control" id="description" cols="30" rows="4" placeholder="Mô tả bài viết !">{{post.description}}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="content">CONTENT</label>
+                                <textarea name="content" id="content">{{post.content}}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="content">Content:</label>
-                                <textarea type="text" id="content" class="form-control" placeholder="Nội dung bài viết !" rows="8" name="content">{{post.content}}</textarea>
+                                <label for="image">URL or ID Youtube:</label>
+                                <input type="text" id="url" class="form-control" placeholder="URL or ID Video youtube !" value="{{post.url}}" name="url">
+                                {{#if message}}
+                                    <p>{{message}}</p>
+                                {{/if}}
+                                {{!-- <input type="file" class="form-control-file" name="image" placeholder="Hình ảnh bài viết !"> --}}
                             </div>
                             <div class="form-group">
-                                <label for="image">Image URL:</label>
-                                {{!-- <input type="text" id="image" class="form-control" name="image" placeholder="Hình ảnh bài viết !"> --}}
-                                <input type="file" class="form-control-file" name="image" placeholder="Hình ảnh bài viết !">
-                            </div>
-                            <div class="form-group">
-                                <label for="category">Category:</label>
+                                <label for="category">CATEGORY</label>
                                 <input type="text" id="category" class="form-control" placeholder="Thể loại bài viết !" value="{{post.category}}" name="category">
                             </div>
-                            <div class="form-group">
-                                <label for="author">Author:</label>
-                                <input type="text" id="author" class="form-control" placeholder="Tác giả !" value="{{post.author}}" name="author">
-                            </div>
-                            <button type="submit" class="btn btn-success">UPDATE POST</button>
+                            <button type="submit" class="btn btn-success rounded-0">UPDATE POST</button>
                         </form>
-
 
                     </div>
                 </div>
@@ -43,3 +51,24 @@
         </div>
     </section>
 </div>
+<script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
+<script type="text/javascript">
+    var content;
+    ClassicEditor
+        .create( document.querySelector( '#content' ), {
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                    { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                ]
+            }
+        } )
+        .then( newEditor => {
+            content = newEditor;
+        })
+        .catch( error => {
+            console.error( error );
+        });
+</script>
