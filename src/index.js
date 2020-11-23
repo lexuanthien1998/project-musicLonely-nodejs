@@ -69,10 +69,8 @@ Handlebars.registerHelper('formatDate', function(dateString) {
   return moment(new Date(dateString)).format('LL');
 });
 
-const host = process.env.HOST || '0.0.0.0';
-const port = process.env.PORT || 3000;
-app.listen(port, host, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+app.listen(process.env.PORT || 3000, () => {
+  console.log('Start App LONELY successfully!')
 })
  
 // Node js
