@@ -1,30 +1,31 @@
 const express = require('express');
 const app = express();
-
 const path = require('path');
+
+//View Engine Handlebars and Thư viện hỗ trợ
 const handlebars = require('express-handlebars');
 const helpers = require('handlebars-helpers')();
+app.engine('hbs', handlebars({
+  extname: '.hbs',
+  helpers: helpers
+}));
 
+//Use file .env
 require('dotenv').config({ path: '.env'})
 
-app.use(express.static(path.join(__dirname, 'public'))); //http://localhost:3000/img/anh.jpg -- các link tĩnh
+//http://localhost:3000/img/anh.jpg -- Path các link tĩnh
+app.use(express.static(path.join(__dirname, 'public')));
 
+//Body-parser with express > 4.16.0
 app.use(express.urlencoded({ extended: true })); //sử dụng cho route POST
 app.use(express.json()); //sử dụng cho route POST với dữ liệu Json (trong js)
 
 const morgan = require('morgan');
 app.use(morgan('combined'));
 
-//Template engine
-app.engine('hbs', handlebars({
-  extname: '.hbs',
-  helpers: helpers
-}));
-
-//Express session
+//Session - Để lưu lại session
 const session = require('express-session');
-// const MongoStore = require('connect-mongo')(session);
-const MemoryStore = require('memorystore')(session)
+const MemoryStore = require('memorystore')(session);
 app.use(session({
   secret: "secret",
   resave: true,
@@ -48,18 +49,20 @@ db.connect();
 //Kết nối DB MySQL use "sequelize"
 // const db = require('./config/db/mysql');
 
-//Khởi tạo passport (Post Login C2)
+//Khởi tạo passport (Sử dụng trong phần Login C2)
 const Passport = require('passport');
 app.use(Passport.initialize());
 app.use(Passport.session()); 
 
-//File route
+//File Route
 const router = require('./routes');
 router(app);
 
+//Moment để format Date
 var moment = require('moment');
 moment().format(); 
 
+//Handlebars Helper -> để tạo ra các hàm hỗ trợ cho FrontEnd Handlebars Helper
 //require('handlebars') KHÁC VỚI require('express-handlebars')
 var Handlebars = require('handlebars');
 Handlebars.registerHelper('formatDate', function(dateString) {
