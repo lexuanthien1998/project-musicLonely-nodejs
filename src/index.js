@@ -9,7 +9,7 @@ require('dotenv').config({ path: '.env'})
 
 app.use(express.static(path.join(__dirname, 'public'))); //http://localhost:3000/img/anh.jpg -- các link tĩnh
 
-app.use(express.urlencoded()); //sử dụng cho route POST
+app.use(express.urlencoded({ extended: true })); //sử dụng cho route POST
 app.use(express.json()); //sử dụng cho route POST với dữ liệu Json (trong js)
 
 const morgan = require('morgan');
