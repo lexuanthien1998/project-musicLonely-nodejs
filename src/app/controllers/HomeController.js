@@ -10,7 +10,7 @@ class HomeController {
         if(req.session.user) {
             Promise.all([
                 Likes.find({ user: req.session.user._id }).lean(),
-                Post.find().limit(30).lean()
+                Post.find().limit(30).sort({ create_at: 'desc'}).lean()
                 //use .lean(), để chuyển thành object (== toObject())
             ])
             .then(results => {       
@@ -21,7 +21,7 @@ class HomeController {
                 console.error("Something went wrong",err);
             })
         } else {
-            Post.find({}).limit(30)
+            Post.find({}).limit(30).sort({ create_at: 'desc'})
             .then(post => {
                 post = post.map(post => post.toObject());
                 res.render('page/home', {post:post});
