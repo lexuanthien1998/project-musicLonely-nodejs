@@ -22,8 +22,8 @@ app.engine('hbs', handlebars({
 }));
 
 //Express session
-const MongoStore = require('connect-mongo')(session);
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 app.use(session({
   secret: "secret",
   resave: true,
