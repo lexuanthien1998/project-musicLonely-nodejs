@@ -290,15 +290,16 @@
 					success: function (data) {
 						if(data.failed) {}
 						if(data.success) {
-							$('.div-comment #content-cm-' + data.id).text(data.content);
 							$('#cmt').val("");
-							$(".comment-form-wrap").hide();
-							$(window).scrollTop($('.div-comment #content-cm-' + data.id).offset().top - 200);
+							$(".comment-form-wrap").hide();							
+							$('.comment-list #content-cm-' + data.id).text(data.content);
+							$(window).scrollTop($('.comment-list #content-cm-' + data.id).offset().top - 200);
 						}
 					}
 				});
 				isEditComment = false;
 				idComment = null;
+				isCommentNew = false;
 			} else {
 				$.ajax({
 					url: '/post/comment/'+ $('#post-id').val() + '/' + $('#cmt').val(),
@@ -315,11 +316,11 @@
 									<div class="row d-flex action-cm">
 										<p class="col">`+$('#user-name').val()+`</p>
 										<div class="col d-flex justify-content-end">
-											<a class="edit-cm" data-id="`+data.id+`" role="button"><i class="fas fa-pencil-alt"></i></a>
-											<a class="delete-cm" data-id="`+data.id+`" role="button"><i class="fas fa-trash-alt"></i></a>
+											<a onclick="editComment('`+data.id+`')" class="edit-cm-new" data-id="`+data.id+`" role="button"><i class="fas fa-pencil-alt"></i></a>
+											<a onclick="deleteComment('`+data.id+`')" class="delete-cm-new" data-id="`+data.id+`" role="button"><i class="fas fa-trash-alt"></i></a>
 										</div>
 									</div>
-									<p>`+data.comment+`</p>
+									<p id="content-cm-`+data.id+`">`+data.comment+`</p>
 								</div>
 							`
 							$('.comment-list .cm-new').append(itemHtml);
@@ -366,4 +367,26 @@
 			}
 		});
 	});
+	function deleteComment(id) {
+		$.ajax({
+			url: '/post/comment/delete/'+ id,
+			type: "POST",
+			processData: false,
+			contentType: false,
+			success: function (data) {
+				if(data.failed) {}
+				if(data.success) {
+					$(".delete-cm-new[data-id='" + data.id + "']").parent().parent().parent().parent().hide();
+				}
+			}
+		});
+	}
+	function editComment(id) {
+		var content = $('#content-cm-' + id).text();
+		$(".comment-form-wrap").show();
+		$(".comment-form-wrap #cmt").val(content);
+		isEditComment = true;
+		idComment = id;
+		$(window).scrollTop($(".comment-form-wrap").offset().top - 200);
+	}
 </script>
