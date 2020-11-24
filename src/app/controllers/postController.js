@@ -163,10 +163,28 @@ class postController {
             comment.content = req.params.comment;
             comment.user = req.session.user;
             comment.save();
-            res.json({success: true, comment: req.params.comment}).end();
+            res.json({success: true, comment: req.params.comment, id:comment._id}).end();
         } else {
             res.json({failed: true}).end();
         }
+    }
+    commentDelete(req, res, next) {
+        if(req.session.user) {
+            Comment.deleteOne({_id: req.params.comment_id}, function (err) {
+                if (err) { res.json({failed: true}).end(); }
+            });
+            res.json({success: true, id: req.params.comment_id}).end();
+        } else {
+            res.json({failed: true}).end();
+        }
+    }
+    commentEdit(req, res, next) {
+        Comment.findById(req.params.comment_id, function (err, comment) {
+            if (err) {res.json({failed: true}).end();}
+            comment.content = req.params.comment_content;
+            comment.save();
+            res.json({success: true, id: req.params.comment_id, content: req.params.comment_content}).end();
+        });
     }
 }
 

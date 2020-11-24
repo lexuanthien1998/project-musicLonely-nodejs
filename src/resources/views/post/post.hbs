@@ -18,7 +18,7 @@
 
                 <div class="row d-flex justify-content-between">
                     <div class="text pt-5 pt-md-0 px-md-4 pr-md-5 ftco-animate">
-                        <h2 class="mb-4">List of <span class="mx-1">{{ user.name }}</span>!</h2>                            
+                        <h2 class="mb-4">Playlist of <span class="mx-1">{{ user.name }}</span>!</h2>                            
                     </div>
                     <div class="mr-5">
                         <a href="/post/create">
@@ -42,16 +42,16 @@
                             {{#each post}}
                             <tr class="d-flex py-2">
                                 <td class="col-2">
-                                    <img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid" alt="">
+                                    <img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid rounded" alt="">
                                 </td>
-                                <td class="col-5">{{this.title}}</td>
+                                <td class="col-5 text-left">{{this.title}}</td>
                                 <td class="col-2">{{this.url}}</td>
                                 <td class="col-3 d-flex justify-content-center">
                                     <a href="/post/{{this._id}}/edit">
                                         <button type="button" class="btn btn-primary btn-sm rounded mr-4">edit</button>
                                     </a>
                                     <div>
-                                        <button type="button" data-id="{{this._id}}" data-toggle="modal" data-target="#DeletePost" class="btn btn-secondary btn-sm rounded">delete</button>
+                                        <button type="button" data-id="{{this._id}}" data-toggle="modal" data-target="#DeletePost" class="btn btn-dark btn-sm rounded">delete</button>
                                     </div>
                                 </td>
                             </tr>

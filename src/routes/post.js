@@ -7,6 +7,8 @@ const upload = multer({ dest: './src/public/uploads/' });
 
 const postController = require('../app/controllers/postController');
 
+router.post('/comment/edit/:comment_id/:comment_content', postController.commentEdit);
+router.post('/comment/delete/:comment_id', postController.commentDelete);
 router.post('/comment/:post_id/:comment', postController.comment);
 router.post('/:post_id/likes', postController.likes);
 router.post('/:post_id/unlikes', postController.unlikes);

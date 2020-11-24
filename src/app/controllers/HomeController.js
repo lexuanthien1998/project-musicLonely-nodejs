@@ -66,8 +66,8 @@ class HomeController {
             Promise.all([
                 Likes.find({ user: req.session.user._id }).populate('user').lean(),
                 Post.findOne({slug: req.params.slug}).populate('user').lean(),
-                Post.find().lean(),
-                Comment.find().populate('user').lean(),
+                Post.find().limit(20).lean(),
+                Comment.find().sort({ createAt: 'desc'}).populate('user').limit(20).lean(),
             ])
             .then(results => {       
                 const [likes, post, listPost, comment] = results;
@@ -80,7 +80,7 @@ class HomeController {
             Promise.all([
                 Post.findOne({slug: req.params.slug}).populate('user').lean(),
                 Post.find().limit(20).lean(),
-                Comment.find().populate('user').lean(),
+                Comment.find().sort({ createAt: 'desc'}).populate('user').limit(20).lean(),
             ])
             .then(results => {       
                 const [post, listPost, comment] = results;

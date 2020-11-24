@@ -43,23 +43,25 @@
 		font-size: 20px;
 	}
 	.div-icon {
-		padding: 10px;
-		border-bottom: 2px solid #f3c623;
+		padding: 5px;
+		background: rgba(255, 255, 255, 0.05);
+  		border-radius: 6px;
 	}
 	.comment-form-wrap span i {
 		color:#ff7e67;
 		font-size: 14px;
 	}
-	.div-comment h6, .new-comment h6 {
-		color: rgba(255, 255, 255, 0.4);
-		font-size: 12px;
-		font-weight: 600;
-		font-family: "Poppins", Arial, sans-serif;
-		letter-spacing: 1px;
-	}
 	.div-comment p, .new-comment p {
-		padding-bottom: 10px;
 		padding-left: 15px;
+		margin-bottom: 0px;
+		font-weight: 600;
+		font-size: 12px;
+	}
+	.div-comment, .new-comment {
+		padding: 12px;
+		background: rgba(255, 255, 255, 0.05);
+  		border-radius: 10px;
+		margin-bottom: 10px;
 	}
 	.font-weight-bold {
 		color: #f3c623;
@@ -68,6 +70,19 @@
 		font-family: "Poppins", Arial, sans-serif;
 		letter-spacing: 1px;
 		text-transform: uppercase;
+	}
+	.action-cm p,.action-cm a {
+		font-weight: 600;
+		font-size: 13px;
+	}
+	.action-cm a {
+		margin-left: 8px;
+	}
+	.about-authors h6 {
+		text-transform: uppercase;
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 0.2px;
 	}
 </style>
 <div id="colorlib-main">
@@ -79,8 +94,8 @@
 						<iframe class="video" width="840" height="480" src="https://www.youtube.com/embed/{{post.url}}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 						<div class="pr-3 mt-4">
 							<h1 class="mb-3">{{post.title}}</h1>
-				
-							<div class="row d-flex justify-content-around div-icon my-3">
+
+							<div class="d-flex justify-content-around div-icon my-3">
 								<a role="button">
 									<i class="fas fa-heart likes" data-id="{{post._id}}" data-number="{{post.likes}}"
 									{{#each likes}}
@@ -104,11 +119,11 @@
 								</a>
 							</div>
 
-							<div class="about-author p-3 d-flex">
-								<h6 class="mt-2">Video by <span>{{post.user.name}}</span> - posted on <span>{{formatDate post.update_at}}</span> - category <span>{{post.category}}</span> - with <span>{{post.views}}</span> Views</h6>
+							<div class="about-authors">
+								<h6 class="mt-2">Video by <span>{{post.user.name}}</span> / posted on <span>{{formatDate post.update_at}}</span> / category <span>{{post.category}}</span> / with <span>{{post.views}}</span> Views</h6>
 							</div>
 
-							<div class="row comment-form-wrap p-3 mt-4" style="display: none;">
+							<div class="comment-form-wrap p-3 mt-3" style="display: none;">
 								<div class="col-12">
 									<div class="form-group">
 										<label for="cmt">Comment
@@ -132,18 +147,25 @@
 								<p>{{{post.content}}}</p>
 							</div>
 
-							<div class="pt-5 mt-5">
+							<div class="pt-5 mt-2">
 								<h4 class="mb-3 font-weight-bold">Comments</h4>
 								<ul class="comment-list">
-									<div class="new-comment">
-										
-									</div>
+									<span class="cm-new">
 
+									</span>
 									{{#each comment}}
 										{{#compare this.post_id "==" ../post._id}}
 										<div class="div-comment">
-											<h6>{{this.user.name}}</h6>
-											<p>{{this.content}}</p>
+											<div class="row d-flex action-cm">
+												<p class="col">{{this.user.name}}</p>
+												{{#compare this.user._id "==" ../user._id}}
+												<div class="col d-flex justify-content-end">
+													<a class="edit-cm" data-id="{{this._id}}" role="button"><i class="fas fa-pencil-alt"></i></a>
+													<a class="delete-cm" data-id="{{this._id}}" role="button"><i class="fas fa-trash-alt"></i></a>
+												</div>
+												{{/compare}}
+											</div>
+											<p id="content-cm-{{ this._id }}">{{this.content}}</p>
 										</div>
 										{{/compare}}
 									{{/each}}
@@ -252,34 +274,96 @@
 			$(".comment-form-wrap").slideToggle();
 		});
 	});
+
+	var isEditComment = false;
+	var idComment;
 	$('#btnComment').click(function() {
 		if($('#user-id').val() == "") {
 				location.href = "/user/login"
 		} else {
-			$.ajax({
-				url: '/post/comment/'+ $('#post-id').val() + '/' + $('#cmt').val(),
+			if(isEditComment) {
+				$.ajax({
+					url: '/post/comment/edit/'+ idComment + '/' + $('#cmt').val(),
+					type: "POST",
+					processData: false,
+					contentType: false,
+					success: function (data) {
+						if(data.failed) {}
+						if(data.success) {
+							$('.div-comment #content-cm-' + data.id).text(data.content);
+							$('#cmt').val("");
+							$(".comment-form-wrap").hide();
+							$(window).scrollTop($('.div-comment #content-cm-' + data.id).offset().top - 200);
+						}
+					}
+				});
+				isEditComment = false;
+				idComment = null;
+			} else {
+				$.ajax({
+					url: '/post/comment/'+ $('#post-id').val() + '/' + $('#cmt').val(),
+					type: "POST",
+					processData: false,
+					contentType: false,
+					success: function (data) {
+						if(data.failed) {}
+						if(data.success) {
+							$('#cmt').val("");
+							$(".comment-form-wrap").hide();
+							var itemHtml = `
+								<div class="new-comment">
+									<div class="row d-flex action-cm">
+										<p class="col">`+$('#user-name').val()+`</p>
+										<div class="col d-flex justify-content-end">
+											<a class="edit-cm" data-id="`+data.id+`" role="button"><i class="fas fa-pencil-alt"></i></a>
+											<a class="delete-cm" data-id="`+data.id+`" role="button"><i class="fas fa-trash-alt"></i></a>
+										</div>
+									</div>
+									<p>`+data.comment+`</p>
+								</div>
+							`
+							$('.comment-list .cm-new').append(itemHtml);
+						}
+					}
+				});
+			}
+		}
+	})
+	$(document).ready(function(){
+		$("#content").click(function(){
+			$("#content-post").toggle();
+		});
+		$(".delete-cm").click(function(){
+			if($('#user-id').val() == "") {
+				location.href = "/user/login"
+			} else {
+				var id = $(this).attr('data-id');
+				$.ajax({
+				url: '/post/comment/delete/'+ id,
 				type: "POST",
 				processData: false,
 				contentType: false,
 				success: function (data) {
 					if(data.failed) {}
 					if(data.success) {
-						$('#cmt').val("");
-						$(".comment-form-wrap").hide();
-						var itemHtml = `
-						<h6>`+ $('#user-name').val() +`</h6>
-						<p>`+ data.comment +`</p>
-						`;
-
-						$('.new-comment').append(itemHtml);
+						$(".delete-cm[data-id='" + data.id + "']").parent().parent().parent().hide();
 					}
 				}
-			});
-		}
-	})
-	$(document).ready(function(){
-		$("#content").click(function(){
-			$("#content-post").toggle();
+				});
+			}
+		});
+		$(".edit-cm").click(function(){
+			if($('#user-id').val() == "") {
+				location.href = "/user/login"
+			} else {
+				var id = $(this).attr('data-id');
+				var content = $('#content-cm-' + id).text();
+				$(".comment-form-wrap").show();
+				$(".comment-form-wrap #cmt").val(content);
+				isEditComment = true;
+				idComment = id;
+				$(window).scrollTop($(".comment-form-wrap").offset().top - 200);
+			}
 		});
 	});
 </script>
