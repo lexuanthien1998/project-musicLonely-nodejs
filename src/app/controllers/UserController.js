@@ -187,8 +187,7 @@ class UserController {
                 
                     transporter.sendMail(mailOptions, function(err, info) {
                         if (err) {
-                            res.json(err);
-                            // res.render('reset-password', {message:'Request reset password is failed !'});
+                            res.render('reset-password', {message:'Request reset password is failed !'});
                         } else {
                             res.redirect('/user/reset-password');
                         }
