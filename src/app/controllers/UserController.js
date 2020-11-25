@@ -129,7 +129,7 @@ class UserController {
     }
     postresetPassword(req, res) {
         if(req.body.email.trim().length == 0) {
-            res.render('reset-password', {message:'Cannot be left blank !'});
+            res.render('reset-password', {message:'Please not empty!'});
         } else {
             async.waterfall([
                 function(done) {
@@ -148,7 +148,7 @@ class UserController {
                             const resetpw = new ResetPassword();
                             resetpw.email = req.body.email;
                             resetpw.token = token;
-                            resetpw.expires = Date.now() + 3600000;
+                            resetpw.expires = Date.now() + 30*60000;
                             resetpw.save(function(err) {
                                 done(err, token, user);
                             });
@@ -172,6 +172,7 @@ class UserController {
                     content += `
                         <div style="padding:25px; font-size: 18px;">
                             <p>Someone (hopefully you) has requested a password reset for your account. Follow the link below to set a new password.</p>
+                            <p>URL your password reset is take effect within 30 minutes.</p>
                             <a href="`+link+`" type="button" style="background-color:#ff7e67; font-weight: 600; padding: 10px 20px; letter-spacing: 1px; text-align: center; border-radius: 5px; color: white; border: none; display: inline-block; font-size: 16px; text-decoration: none;">Confirm Change</a>
                             <p style="margin-top: 10px;">If you don't wish to reset your password, disregard this email and no action will be taken.</p>
                             <p>Thank you !</p>
@@ -189,7 +190,7 @@ class UserController {
                         if (err) {
                             res.render('reset-password', {message:'Request reset password is failed !'});
                         } else {
-                            res.redirect('/user/reset-password');
+                            res.render('reset-password', {message:'Request reset password is successful. Please check your Email to proceed with resetting your password !'});
                         }
                     });
                 },
