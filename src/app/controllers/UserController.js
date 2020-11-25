@@ -1,6 +1,14 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
+//Reset PW
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
+const ResetPassword = require('../models/ResetPassword');
+const async = require('async');
+const crypto = require('crypto');
+const moment = require('moment');
+
 //Login C2
 // const Passport = require('passport');
 // const LocalStrategy = require('passport-local').Strategy;
@@ -114,6 +122,130 @@ class UserController {
     logoutUser(req, res) {
         req.session.destroy();
         res.redirect('/');
+    }
+
+    resetPassword(req, res) {
+        res.render('reset-password');
+    }
+    postresetPassword(req, res) {
+        if(req.body.email.trim().length == 0) {
+            res.render('reset-password', {message:'Cannot be left blank !'});
+        } else {
+            async.waterfall([
+                function(done) {
+                    crypto.randomBytes(60, function(err, buf) {
+                        var token = buf.toString('hex');
+                        done(err, token);
+                    });
+                },
+                function(token, done) {
+                    User
+                    .findOne({email: req.body.email})
+                    .then(function(user) {
+                        if(!user) {
+                            res.render('reset-password', {message:'Account does not exist !'});
+                        } else {
+                            const resetpw = new ResetPassword();
+                            resetpw.email = req.body.email;
+                            resetpw.token = token;
+                            resetpw.expires = Date.now() + 3600000;
+                            resetpw.save(function(err) {
+                                done(err, token, user);
+                            });
+                        }
+                    })
+                },
+                function(token, user, done) {
+                    var transporter = nodemailer.createTransport(smtpTransport({
+                        service: process.env.GMAIL_SERVICE_NAME,
+                        host: process.env.GMAIL_SERVICE_HOST,
+                        port: process.env.GMAIL_SERVICE_PORT,
+                        secure: process.env.GMAIL_SERVICE_SECURE,
+                        auth: {
+                            user: process.env.GMAIL_USER_NAME,
+                            pass: process.env.GMAIL_USER_PASSWORD
+                        }
+                    }));
+
+                    var content = '';
+                    var link = req.protocol + '://' + req.headers.host + '/user/pw/?token=' + token + '\n\n';
+                    content += `
+                        <div style="padding:25px; font-size: 18px;">
+                            <p>Someone (hopefully you) has requested a password reset for your account. Follow the link below to set a new password.</p>
+                            <a href="`+link+`" type="button" style="background-color:#ff7e67; font-weight: 600; padding: 10px 20px; letter-spacing: 1px; text-align: center; border-radius: 5px; color: white; border: none; display: inline-block; font-size: 16px; text-decoration: none;">Confirm Change</a>
+                            <p style="margin-top: 10px;">If you don't wish to reset your password, disregard this email and no action will be taken.</p>
+                            <p>Thank you !</p>
+                        </div>
+                    `;
+                    
+                    var mailOptions = {
+                        from: "ʟ ᴏ ɴ ᴇ ʟ ʏ",
+                        to: user.email,
+                        subject: 'Reset your password',
+                        html: content,
+                    };
+                
+                    transporter.sendMail(mailOptions, function(err, info) {
+                        if (err) {
+                            res.redirect('/user/reset-password', {message:'Request reset password is failed !'});
+                        } else {
+                            res.redirect('/user/reset-password');
+                        }
+                    });
+                },
+            ], function(err) {
+                if (err) return next(err);
+                res.redirect('/user/reset-password');
+            })
+        }
+    }
+    resetPassword_checkToken(req, res) {
+        ResetPassword
+        .findOne({token: req.query.token})
+        .then(function(user) {
+            if(!user) {
+                res.render('reset-password', {message:'Token confirm reset password is incorrect or has expired !'});
+            } else {
+                var dateNow = moment().format('L');
+                var ExpiresToken = moment(user.expires).format('L');
+                if(dateNow <= ExpiresToken) {
+                    var timeNow = moment().format('LTS');
+                    var timeExpiresToken = moment(user.expires).format('LTS');
+                    if(timeNow <= timeExpiresToken) {
+                        res.render('new-pw', {email: user.email});
+                    } else {
+                        res.render('reset-password', {message:'Token confirm reset password is incorrect or has expired !'});
+                    }
+                } else {
+                    res.render('reset-password', {message:'Token confirm reset password is incorrect or has expired !'});
+                }
+            }
+        })
+    }
+    newPassword(req, res) {
+        var q = req.body;
+        if(q.email.trim().length == 0) {
+            res.render('reset-password', {message:'Please recreate the new password reset url'});
+        } else if(q.password.trim().length == 0 || q.passwordcf.trim().length == 0) {
+            res.render('new-pw', {email: q.email, message:'Please not empty'});
+        } else if(q.password != q.passwordcf) {
+            res.render('new-pw', {email: q.email, message:'Enter a new password is incorrect'});
+        } else {
+            User
+            .findOne({email: q.email})
+            .then(function(user) {
+                if(!user) {
+                    res.render('reset-password', {message:'Please recreate the new password reset url'});
+                } else {
+                    var createHash = function (password) {
+                        return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
+                    }
+                    user.password = createHash(q.password);
+                    user.save();
+                    res.render('login-user');
+                }
+            })
+        }
     }
 }
 

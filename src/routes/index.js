@@ -1,7 +1,6 @@
 const userRoute = require('./user'); //export file router user
 const homeRoute = require('./home');
 const postRoute = require('./post');
-const e = require('express');
 
 //route index.js là file chung (file cha) của các file route khác
 function routerOfProject(app) {
