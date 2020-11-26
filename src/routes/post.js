@@ -22,9 +22,3 @@ router.get('/details/:slug', postController.show);
 router.get('/', postController.index);
 
 module.exports = router;
-
-// // //PostController.show
-// 
-
-// //PostController.index
-// router.get('/', postController.index);
