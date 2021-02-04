@@ -8413,10 +8413,10 @@ h1, h2, h3, h4, h5,
   transition: all 0.5s ease; }
   @media (min-width: 992px) {
     #colorlib-aside {
-      width: 25%; } }
+      width: 15%; } }
   @media (max-width: 991.98px) {
     #colorlib-aside {
-      width: 270px;
+      width: 200px;
       background: url(../images/aside.png) no-repeat right top #000 !important;
       -moz-transform: translateX(-270px);
       -webkit-transform: translateX(-270px);
@@ -8594,7 +8594,7 @@ h1, h2, h3, h4, h5,
   transition: all 0.5s ease; }
   @media (min-width: 992px) {
     #colorlib-main {
-      width: 75%; } }
+      width: 85%; } }
 
 .colorlib-nav-toggle {
   cursor: pointer;
@@ -8702,7 +8702,7 @@ h1, h2, h3, h4, h5,
 
 .ftco-about .text h3 {
   font-size: 30px;
-  font-family: "Abril Fatface", cursive;
+  font-family: 'Crimson Text', serif;
   line-height: 1.3;
   color: #fff; }
   .ftco-about .text h3 span {
@@ -8792,8 +8792,10 @@ h1, h2, h3, h4, h5,
     .portfolio-wrap .text h2 {
       font-size: 30px;
       display: inline-block;
-      line-height: 1.3;
-      font-family: "Abril Fatface", cursive; }
+      font-family: 'Crimson Text', serif;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
       @media (max-width: 767.98px) {
         .portfolio-wrap .text h2 {
           font-size: 9vw; } }
@@ -8852,7 +8854,7 @@ h1, h2, h3, h4, h5,
       font-size: 40px;
       display: inline-block;
       line-height: 1.3;
-      font-family: "Abril Fatface", cursive; }
+      font-family: 'Crimson Text', serif; }
       @media (max-width: 767.98px) {
         .portfolio-wrap-2 .text h2 {
           font-size: 9vw; } }
@@ -8913,7 +8915,7 @@ h1, h2, h3, h4, h5,
       height: 500px; } }
 
 .single h1 {
-  font-family: "Abril Fatface", cursive;
+  font-family: 'Crimson Text', serif;
   color: #fff;
   font-size: 50px; }
 
