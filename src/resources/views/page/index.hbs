@@ -1,70 +1,77 @@
-<div class="row box-main">
-    {{#each posts}}
-        <div class="col-12 col-sm-6 col-lg-4 col-xl-3 div-item" data-id="{{this._id}}">
-			<div class="div-image">
-				<a href="/details/{{ this.slug }}">
-					<img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid w-100">
-				</a>
-			</div>
-            <div class="w-100">
-                <div class="d-flex flex-column justify-content-between p-1">
-					<div>
-                        <a href="/details/{{ this.slug }}"><p class="m-0 title">{{this.title}}</p></a>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-						<div class="d-flex align-items-center">
-							<i data-id="{{this._id}}" data-number-likes="
-								{{#if this.likes }}
-									{{helpersArr this.likes 0}}
-								{{ else }}
-									0
-								{{/if}}
-							" class="fas fa-thumbs-up likes
-							{{#if this.likes }}
-								{{#if (helpersCheckActionOfUser this.likes ../user._id 0)}}
-									liked
-								{{/if}}
-							{{/if}}
-							"></i>
-							<i data-id="{{this._id}}" data-number-dislikes="
-								{{#if this.likes }}
-									{{helpersArr this.likes 1}}
-								{{ else }}
-									0
-								{{/if}}
-							" class="fas fa-thumbs-down dislikes mt-2 ml-3
-							{{#if this.likes }}
-								{{#if (helpersCheckActionOfUser this.likes ../user._id 1)}}
-									liked
-								{{/if}}
-							{{/if}}
-							"></i>
+<div class="row h-100 box-main">
+	{{#compare posts.length "==" 0 }}
+        <div class="h-100 d-flex justify-content-center flex-column align-self-center text-center">
+			<i class="fas fa-binoculars icon-empty"></i>
+			<p class="text-empty">it isn't here !</p>
+        </div>
+    {{ else }}
+		{{#each posts}}
+			<div class="col-12 col-sm-6 col-lg-4 col-xl-3 div-item" data-id="{{this._id}}">
+				<div class="div-image">
+					<a href="/details/{{ this.slug }}">
+						<img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid w-100">
+					</a>
+				</div>
+				<div class="w-100">
+					<div class="d-flex flex-column justify-content-between p-1">
+						<div>
+							<a href="/details/{{ this.slug }}"><p class="m-0 title">{{this.title}}</p></a>
 						</div>
-                        <div class="d-flex txt-info-video">
-							{{#if this.likes }}
-								{{#compare (helpersArr this.likes 0) '>' 0}}
-									<p class="number-likes" data-id="{{this._id}}">{{helpersArr this.likes 0}} likes</p>
+						<div class="d-flex align-items-center justify-content-between">
+							<div class="d-flex align-items-center">
+								<i data-id="{{this._id}}" data-number-likes="
+									{{#if this.likes }}
+										{{helpersArr this.likes 0}}
+									{{ else }}
+										0
+									{{/if}}
+								" class="fas fa-thumbs-up likes
+								{{#if this.likes }}
+									{{#if (helpersCheckActionOfUser this.likes ../user._id 0)}}
+										liked
+									{{/if}}
+								{{/if}}
+								"></i>
+								<i data-id="{{this._id}}" data-number-dislikes="
+									{{#if this.likes }}
+										{{helpersArr this.likes 1}}
+									{{ else }}
+										0
+									{{/if}}
+								" class="fas fa-thumbs-down dislikes mt-2 ml-3
+								{{#if this.likes }}
+									{{#if (helpersCheckActionOfUser this.likes ../user._id 1)}}
+										liked
+									{{/if}}
+								{{/if}}
+								"></i>
+							</div>
+							<div class="d-flex txt-info-video">
+								{{#if this.likes }}
+									{{#compare (helpersArr this.likes 0) '>' 0}}
+										<p class="number-likes" data-id="{{this._id}}">{{helpersArr this.likes 0}} likes</p>
+									{{ else }}
+										<p class="number-likes" data-id="{{this._id}}"></p>
+									{{/compare}}
+									{{#compare (helpersArr this.likes 1) '>' 0}}
+										<p class="number-dislikes" data-id="{{this._id}}">{{helpersArr this.likes 1}} dislikes</p>
+									{{ else }}
+										<p class="number-dislikes" data-id="{{this._id}}"></p>
+									{{/compare}}
 								{{ else }}
 									<p class="number-likes" data-id="{{this._id}}"></p>
-								{{/compare}}
-								{{#compare (helpersArr this.likes 1) '>' 0}}
-									<p class="number-dislikes" data-id="{{this._id}}">{{helpersArr this.likes 1}} dislikes</p>
-								{{ else }}
 									<p class="number-dislikes" data-id="{{this._id}}"></p>
+								{{/if}}
+								{{#compare this.views ">" 0}}
+								<p data-id="{{this._id}}">{{this.views}} views</p>
 								{{/compare}}
-							{{ else }}
-								<p class="number-likes" data-id="{{this._id}}"></p>
-								<p class="number-dislikes" data-id="{{this._id}}"></p>
-							{{/if}}
-							{{#compare this.views ">" 0}}
-							<p data-id="{{this._id}}">{{this.views}} views</p>
-                            {{/compare}}
+							</div>
 						</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {{/each}}
+					</div>
+				</div>
+			</div>
+		{{/each}}
+	{{/compare }}
     <input id="user-id" type="text" value="{{user._id}}" hidden>
 </div>
 <script>

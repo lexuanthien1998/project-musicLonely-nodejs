@@ -81,6 +81,20 @@ class HomeController {
             res.redirect('/');
         })
     }
+    search(req, res) {
+        Post.find({'title': {'$regex': req.query.q, '$options': 'i'}}).limit(30).sort({ create_at: 'desc'}).populate('likes').lean()
+        .then(results => {
+            if(req.session.user) {
+                res.render('page/index', { posts: results, user: req.session.user, keyword : req.query.q });
+            } else {
+                res.render('page/index', { posts: results, keyword : req.query.q });
+            }
+        })
+        .catch(err=>{
+            res.end();
+        })
+
+    }
 }
 
 module.exports = new HomeController;

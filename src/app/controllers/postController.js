@@ -15,7 +15,7 @@ class postController {
                 })
                 .catch(next)
             } else {
-                Post.find({user_id: req.session.user._id})
+                Post.find({user: req.session.user})
                 .then(posts => {
                     posts = posts.map(posts => posts.toObject())
                     res.render('post/post', {posts, user: req.session.user});

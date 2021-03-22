@@ -1,16 +1,16 @@
 <div class="d-flex justify-content-between align-items-center py-3 box-menu">
   <div class="col-6">
-    {{!-- <a href="/"><h3>98.</h3></a> --}}
-    <a href="/"><p class="d-none d-md-block title-page">98. lonely</p></a>
-    <a href="/"><p class="d-block d-md-bone title-page">98.</p></a>
+    <a href="/"><h3>98.</h3></a>
+    {{!-- <a href="/"><p class="d-none d-md-block title-page">98.lonely</p></a>
+    <a href="/"><p class="d-block d-md-none title-page">98.</p></a> --}}
   </div>
   <div class="col-6 d-flex justify-content-between item">
-    <div>
+    <form method="GET" action="/search">
       <div class="d-none d-md-block d-flex align-items-center rounded-pill box-search">
         <i class="fas fa-search"></i>
-        <input type="text" class="rounded-pill" placeholder="search...">
+        <input type="text" name="q" placeholder="search..." autocomplete="off" value="{{#if keyword}} {{ keyword }} {{/if}}">
       </div>
-    </div>
+    </form>
     <div>
       <a href="/post/create"><i class="fas fa-pencil-alt rounded-circle mx-2"></i></a>
       <i class="fas fa-cog rounded-circle" data-bs-toggle="dropdown"></i>
@@ -24,9 +24,9 @@
         {{/if}}
         <div class="d-bock d-md-none d-flex align-items-center rounded-pill box-search">
           <i class="fas fa-search"></i>
-          <input type="text" class="rounded-pill" placeholder="search...">
+          <input type="text" placeholder="search...">
         </div>
-    </div>
+      </div>
     </div>
   </div>
 
