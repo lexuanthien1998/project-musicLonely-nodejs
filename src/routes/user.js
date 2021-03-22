@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const nodemailer = require('nodemailer');
-
 const userController = require('../app/controllers/UserController');
 
 router.get('/register', userController.registerUser);

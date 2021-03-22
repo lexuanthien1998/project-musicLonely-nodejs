@@ -13,8 +13,9 @@ const Post = new Schema({
     category: {type: String},
     slug: {type:String, slug: "title"},
     views: {type: Number, maxlength: 255, default: 0},
-    likes: {type: Number, maxlength: 255, default: 0},
     user: { type: Schema.Types.ObjectId, ref: 'User' },
+    likes: [{type: Schema.Types.ObjectId, ref: 'Likes'}],
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
     create_at: {type: Date, default: Date.now},
     update_at: {type: Date, default: Date.now},
 }, { collection: 'posts' });

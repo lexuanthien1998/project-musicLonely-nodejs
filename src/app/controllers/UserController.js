@@ -8,7 +8,6 @@ const ResetPassword = require('../models/ResetPassword');
 const async = require('async');
 const crypto = require('crypto');
 const moment = require('moment');
-
 //Login C2
 // const Passport = require('passport');
 // const LocalStrategy = require('passport-local').Strategy;

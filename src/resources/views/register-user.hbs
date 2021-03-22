@@ -1,55 +1,25 @@
-
-
-<style>
-    h3 {
-        font-family: "Abril Fatface", cursive;
-        letter-spacing: 0.2em;
-    }
-    #submit {
-        letter-spacing: 0.2em;
-    }
-</style>
-<div id="colorlib-main">
-    <section class="ftco-section ftco-no-pt ftco-no-pb">
-        <div class="container px-md-0">
-            <div class="row d-flex no-gutters">
-                <div class="col-lg-8 col-md-7 order-md-last d-flex align-items-stretch">
-                    <div class="contact-wrap w-100 p-md-5 p-4">
-                        <h3 class="mb-4 heading">SignUp</h3>
-                        <form method="POST" action="/user/register" id="contactForm" name="contactForm" class="contactForm">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="label" for="name">Username</label>
-                                        <input type="text" class="form-control" name="username" id="username" placeholder="Username !">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="label" for="name">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email !">
-                                    </div>
-                                </div>
-                                <div class="col-md-12"> 
-                                    <div class="form-group">
-                                        <label class="label" for="email">Password</label>
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password !">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <button type="submit" id="submit" class="btn btn-info rounded heading">Register</button>
-                                </div>
-
-                                <div class="col-md-12 mt-2">
-                                    {{#if message}}
-                                        <i>{{message}}</i>
-                                    {{/if}}
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<div class="shadow login">
+    <h3 class="pb-3 text-center">SignUp</h3>
+    <form method="POST" action="/user/register" class="d-flex flex-column">
+        <div class="d-flex align-items-center box-input my-2">
+            <i class="fas fa-user-tie"></i>
+            <input type="text" name="username" id="username" placeholder="Your username.">
         </div>
-    </section>
+        <div class="d-flex align-items-center box-input my-2">
+            <i class="fas fa-envelope"></i>
+            <input type="email" name="email" id="email" required placeholder="Your email.">
+        </div>
+        <div class="d-flex align-items-center box-input my-2">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" id="password" required placeholder="Your password.">
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="/user/login">login account.</a>
+        </div>
+        <div class="div-btn w-100 text-center pt-4">
+            <input class="rounded-pill shadow" type="submit" value="register">
+        </div>
+        {{#if message}}<p class="py-3">{{message}}</p>{{/if}}
+    </form>
 </div>

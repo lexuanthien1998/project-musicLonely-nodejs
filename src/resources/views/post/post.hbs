@@ -1,97 +1,64 @@
-<style>
-    .btn {
-        font-size: 15px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #fff;
-    }
-    .modal-title {
-        color: #555555;
-        text-transform: lowercase;
-    }
-</style>
-
-<div id="colorlib-main">
-    <section class="ftco-about img ftco-section ftco-no-pt ftco-no-pb" id="about-section">
-        <div class="container-fluid px-5 py-5">
-
-                <div class="row d-flex justify-content-between">
-                    <div class="text pt-5 pt-md-0 px-md-4 pr-md-5 ftco-animate">
-                        <h3 class="mb-4">ALL of <span class="mx-1">{{ user.name }}</span>!</h3>                            
-                    </div>
-                    <div class="mr-5">
-                        <a href="/post/create">
-                            <button type="button" class="btn btn-info btn-sm rounded">Create post</button>
-                        </a>
-                    </div>
+{{#compare posts.length "==" 0 }}
+    <div class="row h-100 box-main">
+        <div class="h-100 d-flex justify-content-center flex-column align-self-center text-center">
+            <a href="/post/create"><i class="fas fa-cloud-upload-alt icon-empty"></i></a>
+        </div>
+    </div>
+{{ else }}
+    <div class="row box-main">
+        {{#each posts}}
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 div-item" data-id="{{this._id}}">
+                <div class="div-image">
+                    <a href="/details/{{ this.slug }}">
+                        <img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid w-100">
+                    </a>
                 </div>
-
-                {{#if post }}
-                <div class="table-wrapper">
-                    <table class="text-center">
-                        <thead>
-                            <tr class="d-flex">
-                                <th class="col-2">IMG</th>
-                                <th class="col-5">TITLE</th>
-                                <th class="col-2">URL</th>
-                                <th class="col-3">ACTION</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each post}}
-                            <tr class="d-flex py-2">
-                                <td class="col-2">
-                                    <img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid rounded" alt="">
-                                </td>
-                                <td class="col-5 text-left">{{this.title}}</td>
-                                <td class="col-2">{{this.url}}</td>
-                                <td class="col-3 d-flex justify-content-center">
-                                    <a href="/post/{{this._id}}/edit">
-                                        <button type="button" class="btn btn-primary btn-sm rounded mr-4">edit</button>
-                                    </a>
-                                    <div>
-                                        <button type="button" data-id="{{this._id}}" data-toggle="modal" data-target="#DeletePost" class="btn btn-dark btn-sm rounded">delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            {{/each}} 
-                        </tbody>
-                    </table>
-                </div>
-                {{/if }}
-
-                <div class="modal fade" id="DeletePost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="d-flex justify-content-between mx-4 my-3">
-                                <h3 class="modal-title">XÓA HAY KHÔNG XÓA !</h3>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="w-100">
+                    <div class="d-flex flex-column justify-content-between p-1">
+                        <div>
+                            <a href="/details/{{ this.slug }}"><p class="m-0 title">{{this.title}}</p></a>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <a href="/post/{{this._id}}/edit"><i class="fas fa-pencil-alt likes"></i></a>
+                                <i class="fas fa-trash-alt likes ml-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-id="{{this._id}}" data-bs-title="{{this.title}}"></i>
                             </div>
-                            <div class="d-flex ml-auto mx-4 my-4">
-                                <button type="button" id="btn-back" class="btn btn-secondary rounded-0 mr-3" data-dismiss="modal">Không</button>
-                                <form id="addAction" action="" method="POST">
-                                    <button type="submit" class="btn btn-danger rounded-0">Có</button>
-                                </form>
+                            <div class="d-flex txt-info-video">
+                                <p>{{this.category}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-        </div>
-    </section>
-</div>
+            </div>
+        {{/each}}
+    </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            $('#DeletePost').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var id = button.data('id');
-                $("#addAction").attr("action", "/post/"+id+"/delete");
-            })
-            $('#btn-back').click(function() {
-                $("#addAction").attr("action", "");
-            })
-        });
-    </script>
-</div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3 text-center">
+                <h4 class="modal-title">Delete or No !</h4>
+                <div class="d-flex mx-auto pt-3">
+                    <button type="button" class="btn rounded-pill mr-3" data-bs-dismiss="modal" aria-label="Close">No</button>
+                    <form id="addAction" action="" method="POST">
+                        <button type="submit" class="btn rounded-pill">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/compare }}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var id = button.getAttribute('data-bs-id')
+        $("#addAction").attr("action", "/post/"+id+"/delete");
+
+        var recipient = button.getAttribute('data-bs-title')
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalBodyInput = exampleModal.querySelector('.modal-body input')
+        modalTitle.textContent = 'You want to delete: ' + recipient
+    })
+</script>

@@ -1,10 +1,32 @@
+{{> header2  }}
+<body class="vh-100">
+    <div class="fixed-top shadow menu">{{> menu2 }}</div>
+    <div class="h-100 body">{{{ body }}}</div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    <script>
+    $(document).ready(function(){
+        if(window.location.pathname.indexOf('/user') == 0) {
+            $('.menu').hide();
+            $(".body").addClass("d-flex align-items-center justify-content-center box-login");
+        } else {
+            $('.menu').show();
+            $(".body").addClass("main");
+        }
+    });
+    </script>
+</body>
+</html>
 
-{{> header }}
-<div id="colorlib-page">
-    {{> menu }}
-    {{{ body }}}
-</div>
-<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-{{> script }}
-{{> footer }}
-{{!-- {{> header  }} và {{> herder  }} là file ở partials, partials là phần của handlebars để tạo các file header, footer,... --}}
+
+{{!-- {{> header }} --}}
+{{!-- <div id="colorlib-page"> --}}
+    {{!-- {{> menu }} --}}
+    {{!-- {{{ body }}} --}}
+{{!-- </div> --}}
+{{!-- <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> --}}
+{{!-- {{> script }} --}}
+{{!-- {{> footer }} --}}
+{{!-- {{> header  }} là file ở partials, partials là phần của handlebars để tạo các file header, footer,... --}}

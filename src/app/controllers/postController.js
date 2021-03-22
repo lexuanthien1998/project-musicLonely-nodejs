@@ -9,16 +9,16 @@ class postController {
         } else {
             if(req.session.user.role_id == 1) {
                 Post.find({})
-                .then(post => {
-                    post = post.map(post => post.toObject())
-                    res.render('post/post', {post, user: req.session.user});
+                .then(posts => {
+                    posts = posts.map(posts => posts.toObject())
+                    res.render('post/post', {posts, user: req.session.user});
                 })
                 .catch(next)
             } else {
                 Post.find({user_id: req.session.user._id})
-                .then(post => {
-                    post = post.map(post => post.toObject())
-                    res.render('post/post', {post, user: req.session.user});
+                .then(posts => {
+                    posts = posts.map(posts => posts.toObject())
+                    res.render('post/post', {posts, user: req.session.user});
                 })
                 .catch(next)
             }
@@ -42,16 +42,18 @@ class postController {
     }
 
     update(req, res, next) {
-        Post.updateOne({_id: req.params.id}, {
-            title: req.body.title,
-            description: req.body.description,
-            content: req.body.content,
-            image: req.file.filename,
-            category: req.body.category,
-            author: req.body.author,
-        })
-        .then(() => res.redirect('/post'))
-        .catch(next)
+        if(req.body.title != "") {
+            Post.updateOne({_id: req.params.id}, {
+                title: req.body.title,
+                content: req.body.content,
+                // image: req.file.filename,
+                category: req.body.category,
+                author: req.body.author,
+            })
+            .then(() => res.redirect('/post'))
+            .catch(next)
+        }
+        res.render('post/editPost', {not_empty:'Error! An error occurred. Please try again.', post: req.body, user: req.session.user});
     }
 
     delete(req, res, next) {
@@ -66,124 +68,179 @@ class postController {
 
     create(req, res) {
         if(!req.session.user) {
-            res.redirect('/');
+            res.redirect('/user/login');
         } else {
             res.render('post/createPost', {user: req.session.user});
         }
     }
 
     store(req, res) {
-        var url = req.body.url;
-        var myRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/gi;
-        if(myRegex.test(url)) {
-            var ID = '';
-            url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-            if(url[2] !== undefined) {
-                ID = url[2].split(/[^0-9a-z_\-]/i);
-                ID = ID[0];
+        if(req.body.title != "") {
+            var url = req.body.url;
+            var myRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/gi;
+            if(myRegex.test(url)) {
+                var ID = '';
+                url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+                if(url[2] !== undefined) {
+                    ID = url[2].split(/[^0-9a-z_\-]/i);
+                    ID = ID[0];
+                }
+                else {
+                    ID = url;
+                }
+                const post = new Post();
+                post.title = req.body.title;
+                post.content = req.body.content;
+                post.url = ID;
+                post.category = req.body.category;
+                post.user = req.session.user;
+                // post.image = req.file.filename;
+                post.save();
+                res.redirect('/post');
+            } else {
+                // res.redirect('back');
+                res.render('post/createPost', {message:'URL illegal. Only supports youtube videos.'});
             }
-            else {
-                ID = url;
-            }
-            const post = new Post();
-            post.title = req.body.title;
-            post.description = req.body.description;
-            post.content = req.body.content;
-            post.url = ID;
-            post.category = req.body.category;
-            post.user = req.session.user;
-            // post.image = req.file.filename;
-            post.save();
-            res.redirect('/post');
-        } else {
-            // res.redirect('back');
-            req.flash('info', 'Flashed message');
-            res.render('post/createPost', {message:'Website gà mờ hiện tại chỉ hỗ trợ Video Youtube. Mong bạn thông cảm !'});
         }
+        res.render('post/createPost', {not_empty:'Error! An error occurred. Please try again.'});
     }
 
     likes(req, res, next) {
         if(req.session.user) {
-            Post.findById(req.params.post_id, function (err, post) {
-                if (err) {res.json({failed: true}).end();}
-                post.likes += 1;
-                post.save();
-            });
-
-            const like = new Likes();
-            like.post_id = req.params.post_id;
-            like.user = req.session.user;
-            like.save();
-            
-            res.json({success: true, post_id: req.params.post_id}).end();
-        } else {
-            res.json({failed: true}).end();
-        }
-    }
-
-    unlikes(req, res, next) {
-        if(req.session.user) {
-            Post.findById(req.params.post_id, function (err, post) {
+            Likes.findOne({user: req.session.user, post: req.params.id, type: 0}, function (err, results) {
                 if (err) {
                     res.json({failed: true}).end();
                 }
-                if(post.likes <= 0) {
-                    post.likes = 0;
-                } else {
-                    post.likes -= 1;
-                }
-                post.save();
-            });
+                if(results == null) {
+                    const like = new Likes();
+                    like.post = req.params.id;
+                    like.user = req.session.user;
+                    like.save();
 
-            Likes.deleteOne({user: req.session.user._id, post_id: req.params.post_id}, function (err) {
-                if (err) return handleError(err);
+                    Post.findById(req.params.id, function (err, post) {
+                        post.likes.push(like);
+                        post.save();
+                    });
+
+                    Likes.findOne({user: req.session.user, post: req.params.id, type: 1}, function (err, disliked) {
+                        if(disliked != null) {
+                            Post.findById(req.params.id, function (err, post) {
+                                post.likes = post.likes.filter(item => item != String(disliked._id));
+                                post.save();
+                            });
+                            Likes.deleteMany({user: req.session.user, post: req.params.id, type: 1}, function (err) {
+                                if(err) res.json({failed: true}).end();
+                            });
+                        }
+                    });
+
+                    res.json({likes: true, id: req.params.id}).end();
+                } else {
+                    Post.findById(req.params.id, function (err, post) {
+                        post.likes = post.likes.filter(item => item != String(results._id));
+                        post.save();
+                    });
+                    Likes.deleteMany({user: req.session.user, post: req.params.id, type: 0}, function (err) {
+                        if(err) res.json({failed: true}).end();
+                    });
+                    res.json({unlikes: true, id: req.params.id}).end();
+                }
             });
-            
-            res.json({success: true, post_id: req.params.post_id}).end();
         } else {
             res.json({failed: true}).end();
         }
     }
 
-    addViews(req, res, next) {
-        Post.findById(req.params.post_id, function (err, post) {
-            if (err) {
-                res.json({failed: true}).end();
-            }
-            post.views += 1;
-            post.save();
-            res.end();
-        });
+    dislikes(req, res, next) {
+        if(req.session.user) {
+            Likes.findOne({user: req.session.user, post: req.params.id, type: 1}, function (err, results) {
+                if (err) {
+                    res.json({failed: true}).end();
+                }
+                if(results == null) {
+                    const like = new Likes();
+                    like.post = req.params.id;
+                    like.user = req.session.user;
+                    like.type = 1;
+                    like.save();
+
+                    Post.findById(req.params.id, function (err, post) {
+                        post.likes.push(like);
+                        post.save();
+                    });
+
+                    Likes.findOne({user: req.session.user, post: req.params.id, type: 0}, function (err, liked) {
+                        if(liked != null) {
+                            Post.findById(req.params.id, function (err, post) {
+                                post.likes = post.likes.filter(item => item != String(liked._id));
+                                post.save();
+                            });
+                            Likes.deleteMany({user: req.session.user, post: req.params.id, type: 0}, function (err) {
+                                if(err) res.json({failed: true}).end();
+                            });
+                        }
+                    });
+                    res.json({dislikes: true, id: req.params.id}).end();
+                } else {
+                    Post.findById(req.params.id, function (err, post) {
+                        post.likes = post.likes.filter(item => item != String(results._id));
+                        post.save();
+                    });
+                    Likes.deleteMany({user: req.session.user, post: req.params.id, type: 1}, function (err) {
+                        if(err) res.json({failed: true}).end();
+                    });
+                    res.json({undislikes: true, id: req.params.id}).end();
+                }
+            });
+        } else {
+            res.json({failed: true}).end();
+        }
     }
 
     comment(req, res, next) {
         if(req.session.user) {
             const comment = new Comment();
-            comment.post_id = req.params.post_id;
-            comment.content = req.params.comment;
+            comment.post = req.params.id;
+            comment.content = req.params.content;
             comment.user = req.session.user;
             comment.save();
-            res.json({success: true, comment: req.params.comment, id:comment._id}).end();
+            Post.findById(req.params.id, function (err, post) {
+                post.comments.push(comment);
+                post.save();
+            });
+            res.json({
+                success: true, 
+                content: req.params.content, 
+                id:comment._id,
+                username: req.session.user.name
+            }).end();
         } else {
             res.json({failed: true}).end();
         }
     }
     commentDelete(req, res, next) {
         if(req.session.user) {
-            Comment.deleteOne({_id: req.params.comment_id}, function (err) {
+            Comment.findById(req.params.id, function (err, comment) {
+                if (err) {res.json({failed: true}).end();}
+                Post.findById(comment.post, function (err, post) {
+                    post.comments = post.comments.filter(item => item != String(comment._id));
+                    post.save();
+                });
+            });
+            Comment.deleteOne({_id: req.params.id}, function (err) {
                 if (err) { res.json({failed: true}).end(); }
             });
-            res.json({success: true, id: req.params.comment_id}).end();
+            res.json({success: true, id: req.params.id}).end();
         } else {
             res.json({failed: true}).end();
         }
     }
     commentEdit(req, res, next) {
-        Comment.findById(req.params.comment_id, function (err, comment) {
+        Comment.findById(req.params.id, function (err, comment) {
             if (err) {res.json({failed: true}).end();}
-            comment.content = req.params.comment_content;
+            comment.content = req.params.content;
             comment.save();
-            res.json({success: true, id: req.params.comment_id, content: req.params.comment_content}).end();
+            res.json({success: true, id: req.params.id, content: req.params.content}).end();
         });
     }
 }

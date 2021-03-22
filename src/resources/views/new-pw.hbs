@@ -1,51 +1,18 @@
-<style>
-    h3 {
-        font-family: "Abril Fatface", cursive;
-        letter-spacing: 0.2em;
-    }
-    #submit {
-        letter-spacing: 0.2em;
-    }
-    #forget-pw {
-        font-size: 11px;
-        font-weight: 600;
-    }
-    .ftco-section {
-        margin-top:100px;
-    }
-</style>
-<div id="colorlib-main">
-    <section class="ftco-section ftco-no-pt ftco-no-pb">
-        <div class="container px-md-0">
-            <div class="row d-flex no-gutters">
-                <div class="col-12 order-md-last d-flex align-items-stretch">
-                    <div class="contact-wrap w-100 p-md-5 p-4">
-                        <form method="POST" action="/user/update-new-password" id="contactForm" name="contactForm" class="contactForm">
-                            <div class="row">
-                                <div class="col-md-12 py-2">
-                                    {{#if message}}
-                                        <i>{{message}}</i>
-                                    {{/if}}
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="password" class="form-control" name="password" id="password" placeholder="New password !">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="password" class="form-control" name="passwordcf" id="passwordcf" placeholder="Enter a new password !">
-                                    </div>
-                                </div>
-                                <input type="email" name="email" id="email" value="{{email}}" hidden>                             
-                                <div class="col-md-12">
-                                    <button type="submit" id="submit" class="btn btn-info rounded heading">Send</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<div class="shadow login">
+    <h3 class="pb-3 text-center">reset password</h3>
+    <form method="POST" action="/user/update-new-password" class="d-flex flex-column">
+        {{#if message}}<p>{{message}}</p>{{/if}}
+        <div class="d-flex align-items-center box-input my-2">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" id="password" placeholder="Your new password.">
         </div>
-    </section>
+        <div class="d-flex align-items-center box-input my-2">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="passwordcf" id="passwordcf" placeholder="Confirm password.">
+        </div>
+        <input type="email" name="email" id="email" value="{{email}}" hidden>
+        <div class="div-btn w-100 text-center pt-3">
+            <input class="rounded-pill shadow" type="submit" value="reset">
+        </div>
+    </form>
 </div>

@@ -65,8 +65,28 @@ moment().format();
 //Handlebars Helper -> để tạo ra các hàm hỗ trợ cho FrontEnd Handlebars Helper
 //require('handlebars') KHÁC VỚI require('express-handlebars')
 var Handlebars = require('handlebars');
-Handlebars.registerHelper('formatDate', function(dateString) {
-  return moment(new Date(dateString)).format('LL');
+Handlebars.registerHelper('formatDate', function(date) {
+  moment.locale('vi'); 
+  if(moment(date).add(5, 'days') < moment()) {
+    return moment(date).format("DD MMM, YYYY");
+  } else {
+    return moment(date).format("ddd, HH:mm");
+  }
+});
+Handlebars.registerHelper('helpersArr', function(array, type) {
+  return array.filter(item => item.type == type).length;
+});
+Handlebars.registerHelper('helpersCheckActionOfUser', function(array, user, type) {
+  var el = false;
+  array.forEach(function(item) {
+    if (item.type == type) {
+      if(item.user == user) {
+        el = true
+        return el
+      }
+    }
+  });
+  return el;
 });
 
 app.listen(process.env.PORT || 3000, () => {

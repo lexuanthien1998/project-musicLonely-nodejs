@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-between align-items-center py-3 box-menu">
+  <div class="col-6">
+    {{!-- <a href="/"><h3>98.</h3></a> --}}
+    <a href="/"><p class="d-none d-md-block title-page">98. lonely</p></a>
+    <a href="/"><p class="d-block d-md-bone title-page">98.</p></a>
+  </div>
+  <div class="col-6 d-flex justify-content-between item">
+    <div>
+      <div class="d-none d-md-block d-flex align-items-center rounded-pill box-search">
+        <i class="fas fa-search"></i>
+        <input type="text" class="rounded-pill" placeholder="search...">
+      </div>
+    </div>
+    <div>
+      <a href="/post/create"><i class="fas fa-pencil-alt rounded-circle mx-2"></i></a>
+      <i class="fas fa-cog rounded-circle" data-bs-toggle="dropdown"></i>
+      <div class="dropdown-menu dropdown-menu-end">
+        {{#if user}}
+          <a href="/post" class="dropdown-item"><i class="fas fa-server rounded-circle"></i></a>
+          <a href="/user/logout" class="dropdown-item"><i class="fas fa-power-off rounded-circle"></i></a>
+        {{ else }}
+          <a href="/user/login" class="dropdown-item"><i class="fas fa-sign-in-alt rounded-circle"></i></a>
+          <a href="/user/register" class="dropdown-item"><i class="fas fa-user rounded-circle"></i></a>
+        {{/if}}
+        <div class="d-bock d-md-none d-flex align-items-center rounded-pill box-search">
+          <i class="fas fa-search"></i>
+          <input type="text" class="rounded-pill" placeholder="search...">
+        </div>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    var arr = [];
+    arr = [];
+    $('#colorlib-main-menu li').children('a').each(function () {
+        var url = this.href;
+        if(window.location.href.indexOf(url) > -1) {
+          arr.push(window.location.href.indexOf(url));
+        }
+
+        if (window.location.href.indexOf(url) > -1) {
+          $(this).parent().addClass('colorlib-active');
+          return true;
+        }
+        if (window.location.href.indexOf('details/') > -1) {
+          $('#home-post').addClass('colorlib-active');
+          $('#home').removeClass('colorlib-active');
+        }
+        if(arr.length > 1) {
+          $('#home').removeClass('colorlib-active');
+        }
+    });
+  });
+</script>

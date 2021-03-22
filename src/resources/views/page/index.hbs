@@ -1,0 +1,190 @@
+<div class="row box-main">
+    {{#each posts}}
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3 div-item" data-id="{{this._id}}">
+			<div class="div-image">
+				<a href="/details/{{ this.slug }}">
+					<img src="https://img.youtube.com/vi/{{this.url}}/maxresdefault.jpg" class="img-fluid w-100">
+				</a>
+			</div>
+            <div class="w-100">
+                <div class="d-flex flex-column justify-content-between p-1">
+					<div>
+                        <a href="/details/{{ this.slug }}"><p class="m-0 title">{{this.title}}</p></a>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+						<div class="d-flex align-items-center">
+							<i data-id="{{this._id}}" data-number-likes="
+								{{#if this.likes }}
+									{{helpersArr this.likes 0}}
+								{{ else }}
+									0
+								{{/if}}
+							" class="fas fa-thumbs-up likes
+							{{#if this.likes }}
+								{{#if (helpersCheckActionOfUser this.likes ../user._id 0)}}
+									liked
+								{{/if}}
+							{{/if}}
+							"></i>
+							<i data-id="{{this._id}}" data-number-dislikes="
+								{{#if this.likes }}
+									{{helpersArr this.likes 1}}
+								{{ else }}
+									0
+								{{/if}}
+							" class="fas fa-thumbs-down dislikes mt-2 ml-3
+							{{#if this.likes }}
+								{{#if (helpersCheckActionOfUser this.likes ../user._id 1)}}
+									liked
+								{{/if}}
+							{{/if}}
+							"></i>
+						</div>
+                        <div class="d-flex txt-info-video">
+							{{#if this.likes }}
+								{{#compare (helpersArr this.likes 0) '>' 0}}
+									<p class="number-likes" data-id="{{this._id}}">{{helpersArr this.likes 0}} likes</p>
+								{{ else }}
+									<p class="number-likes" data-id="{{this._id}}"></p>
+								{{/compare}}
+								{{#compare (helpersArr this.likes 1) '>' 0}}
+									<p class="number-dislikes" data-id="{{this._id}}">{{helpersArr this.likes 1}} dislikes</p>
+								{{ else }}
+									<p class="number-dislikes" data-id="{{this._id}}"></p>
+								{{/compare}}
+							{{ else }}
+								<p class="number-likes" data-id="{{this._id}}"></p>
+								<p class="number-dislikes" data-id="{{this._id}}"></p>
+							{{/if}}
+							{{#compare this.views ">" 0}}
+							<p data-id="{{this._id}}">{{this.views}} views</p>
+                            {{/compare}}
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+    <input id="user-id" type="text" value="{{user._id}}" hidden>
+</div>
+<script>
+$(document).ready(function(){
+	$('.likes').click(function() {
+		if($('#user-id').val() == "") {
+			location.href = "/user/login"
+		} else {
+			$.ajax({
+				url: '/post/'+ $(this)[0].dataset.id + '/likes',
+				type: "POST",
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					if(data.failed) {
+						return
+					}
+					if(data.likes) {
+						var item = $(".likes[data-id='" + data.id + "']");
+						$(item).addClass("liked");
+
+						var numberLikes = $(".number-likes[data-id='" + data.id + "']");
+						$(numberLikes).show();
+						$(numberLikes).text('');
+						$(numberLikes).text((Number($(item).attr('data-number-likes')) + 1) + ' likes');
+						$(item).attr("data-number-likes", Number($(item).attr('data-number-likes')) + 1);
+
+						var item_dislike = $(".dislikes[data-id='" + data.id + "']");
+						if($(item_dislike).hasClass("liked")) {
+							$(item_dislike).removeClass("liked");
+
+							var numberDislikes = $(".number-dislikes[data-id='" + data.id + "']");
+							if(Number($(item_dislike).attr('data-number-dislikes')) - 1 == 0) {
+								$(numberDislikes).hide();
+							} else {
+								$(numberDislikes).show();
+								$(numberDislikes).text('');
+								$(numberDislikes).text((Number($(item_dislike).attr('data-number-dislikes')) - 1) + ' dislikes');
+							}
+							$(item_dislike).attr("data-number-dislikes", Number($(item_dislike).attr('data-number-dislikes')) - 1);
+						}
+						return
+					}
+					if(data.unlikes) {
+						var item = $(".likes[data-id='" + data.id + "']");
+						$(item).removeClass("liked");
+
+						var numberLikes = $(".number-likes[data-id='" + data.id + "']");
+						if(Number($(item).attr('data-number-likes')) - 1 == 0) {
+							$(numberLikes).hide();
+						} else {
+							$(numberLikes).show();
+							$(numberLikes).text('');
+							$(numberLikes).text((Number($(item).attr('data-number-likes')) - 1) + ' likes');
+						}
+						$(item).attr("data-number-likes", Number($(item).attr('data-number-likes')) - 1);
+						return
+					}
+				}
+			});
+		}
+	})
+
+	$('.dislikes').click(function() {
+		if($('#user-id').val() == "") {
+			location.href = "/user/login"
+		} else {
+			$.ajax({
+				url: '/post/'+ $(this)[0].dataset.id + '/dislikes',
+				type: "POST",
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					if(data.failed) {
+						return
+					}
+					if(data.dislikes) {
+						var item = $(".dislikes[data-id='" + data.id + "']");
+						$(item).addClass("liked");
+
+						var numberDislikes = $(".number-dislikes[data-id='" + data.id + "']");
+						$(numberDislikes).show();
+						$(numberDislikes).text('');
+						$(numberDislikes).text((Number($(item).attr('data-number-dislikes')) + 1) + ' dislikes');
+						$(item).attr("data-number-dislikes", Number($(item).attr('data-number-dislikes')) + 1);
+
+						var item_likes = $(".likes[data-id='" + data.id + "']");
+						if($(item_likes).hasClass("liked")) {
+							$(item_likes).removeClass("liked");
+
+							var numberLikes = $(".number-likes[data-id='" + data.id + "']");
+							if(Number($(item_likes).attr('data-number-likes')) - 1 == 0) {
+								$(numberLikes).hide();
+							} else {
+								$(numberLikes).show();
+								$(numberLikes).text('');
+								$(numberLikes).text((Number($(item_likes).attr('data-number-likes')) - 1) + ' likes');
+							}
+							$(item_likes).attr("data-number-likes", Number($(item_likes).attr('data-number-likes')) - 1);
+						}
+						return
+					}
+					if(data.undislikes) {
+						var item = $(".dislikes[data-id='" + data.id + "']");
+						$(item).removeClass("liked");
+
+						var numberDislikes = $(".number-dislikes[data-id='" + data.id + "']");
+						if(Number($(item).attr('data-number-dislikes')) - 1 == 0) {
+							$(numberDislikes).hide();
+						} else {
+							$(numberDislikes).show();
+							$(numberDislikes).text('');
+							$(numberDislikes).text((Number($(item).attr('data-number-dislikes')) - 1) + ' dislikes');
+						}
+						$(item).attr("data-number-dislikes", Number($(item).attr('data-number-dislikes')) - 1);
+						return
+					}
+				}
+			});
+		}
+	})
+});
+</script>
