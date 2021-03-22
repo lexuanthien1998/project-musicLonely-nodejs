@@ -1,12 +1,23 @@
 const Post = require('../models/Post');
 const Likes = require('../models/Likes');
 const Comment = require('../models/Comment');
+const axios = require('axios');
 
 class HomeController {
     constructor(req, res) {
     }
 
     home(req, res) {
+        // axios.get('https://www.googleapis.com/youtube/v3/videos', {
+        //     params: {
+        //         id: 'MjlQ3oOb8U0',
+        //         key: 'AIzaSyDD4sN67NX4_2JYGvDnVqBiJPSctzZqLGA',
+        //         part: 'snippet,contentDetails,statistics,status',
+        //     }
+        // }).then(response => {
+        //     res.json({data: response.data});
+        // })
+
         // Post.count().exec(function (err, count) {
         //     var random = Math.floor(Math.random() * count)
         //     Post.find().skip(random).limit(30).populate('likes').lean().exec(function (err, results) {
