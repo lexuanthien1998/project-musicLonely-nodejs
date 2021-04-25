@@ -46,16 +46,15 @@ a {
     filter: drop-shadow(3px 3px rgba(0,0,0,.4));
 }
 .box-menu h3 {
-    font-size: 40px !important;
+    font-size: 35px !important;
     font-weight: 600 !important;
     font-family: "DomaineDisplayNarrow",Georgia,serif;
-/*     background: linear-gradient(to bottom, #4D774E, #FFFFFF) no-repeat;
+    background: linear-gradient(to bottom, #4D774E, #FFFFFF) no-repeat;
     color: transparent !important;
     background-clip: text !important;
-    -webkit-background-clip: text !important; */
-    color:#fff;
+    -webkit-background-clip: text !important;
     cursor: pointer;
-    filter: drop-shadow(1px 1px rgba(0,0,0,.2));
+    filter: drop-shadow(2px 2px rgba(0,0,0,.5));
     margin: 0;
 }
 .box-menu input {
